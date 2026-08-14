@@ -1,7 +1,6 @@
 # HAPR Visual — 3D Agency Website
 
-A full-stack, pixel-faithful clone of the HAPR Visual agency website
-(https://www.haprvisual.com — home page design by Oleg Ladygin on Dribbble).
+A full-stack, pixel-faithful HAPR Visual agency website
 
 **Stack:** Next.js 14 (App Router) · TypeScript · Tailwind CSS · GSAP · Framer
 Motion · Three.js + React Three Fiber + Drei · Prisma + PostgreSQL ·
