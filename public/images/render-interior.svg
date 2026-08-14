@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" role="img" aria-label="Abstract 3D interior render placeholder">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#EFE7D8"/>
+      <stop offset="1" stop-color="#DDD0BC"/>
+    </linearGradient>
+    <linearGradient id="wall" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#E8DFCE"/>
+      <stop offset="1" stop-color="#D8CBB4"/>
+    </linearGradient>
+    <linearGradient id="floor" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#C9B89D"/>
+      <stop offset="1" stop-color="#B09C7E"/>
+    </linearGradient>
+    <linearGradient id="sofa" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#8A7A68"/>
+      <stop offset="1" stop-color="#6E5F4E"/>
+    </linearGradient>
+    <radialGradient id="sun" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#FFF7E6" stop-opacity="0.9"/>
+      <stop offset="1" stop-color="#FFF7E6" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="1200" height="900" fill="url(#bg)"/>
+  <ellipse cx="880" cy="220" rx="420" ry="320" fill="url(#sun)"/>
+
+  <path d="M0 250 L1200 200 L1200 620 L0 620 Z" fill="url(#wall)"/>
+  <path d="M0 620 L1200 620 L1200 900 L0 900 Z" fill="url(#floor)"/>
+  <line x1="0" y1="620" x2="1200" y2="620" stroke="#B49F80" stroke-width="3"/>
+
+  <g opacity="0.9">
+    <ellipse cx="300" cy="680" rx="230" ry="42" fill="#3B2F26" opacity="0.28"/>
+  </g>
+
+  <g transform="translate(140,300)">
+    <rect x="0" y="40" width="46" height="300" rx="4" fill="#6E5F4E"/>
+    <rect x="340" y="40" width="46" height="300" rx="4" fill="#6E5F4E"/>
+    <path d="M20 46 h340 v160 a170 90 0 0 -340 0 z" fill="url(#sofa)"/>
+    <rect x="22" y="205" width="336" height="110" rx="6" fill="#7D6B58"/>
+    <rect x="34" y="198" width="312" height="26" rx="13" fill="#A9957E"/>
+    <g>
+      <rect x="30" y="252" width="60" height="18" rx="9" fill="#8C7B66"/>
+      <rect x="110" y="252" width="60" height="18" rx="9" fill="#8C7B66"/>
+      <rect x="190" y="252" width="60" height="18" rx="9" fill="#8C7B66"/>
+      <rect x="270" y="252" width="60" height="18" rx="9" fill="#8C7B66"/>
+    </g>
+  </g>
+
+  <g transform="translate(560,120)">
+    <line x1="60" y1="0" x2="60" y2="340" stroke="#6E5F4E" stroke-width="6"/>
+    <path d="M30 300 h60 l14 -44 h-88 z" fill="#4A4038"/>
+    <ellipse cx="60" cy="330" rx="70" ry="12" fill="#4A4038" opacity="0.6"/>
+    <ellipse cx="60" cy="120" rx="58" ry="90" fill="#F5EBDC"/>
+    <circle cx="60" cy="90" r="20" fill="#8A7A68"/>
+  </g>
+
+  <g transform="translate(760,470)">
+    <rect x="0" y="0" width="340" height="240" rx="10" fill="#F3ECDD"/>
+    <rect x="20" y="24" width="130" height="86" rx="4" fill="#C9B89D"/>
+    <rect x="24" y="130" width="120" height="40" rx="4" fill="#D8CBB4"/>
+    <rect x="168" y="60" width="150" height="110" rx="4" fill="#D8CBB4"/>
+    <circle cx="243" cy="115" r="60" fill="#BFA98C"/>
+    <rect x="0" y="240" width="340" height="10" fill="#A9957E"/>
+  </g>
+
+  <text x="60" y="852" font-family="Helvetica, Arial, sans-serif" font-size="22" letter-spacing="6" fill="#6E5F4E" opacity="0.75">HAPR VISUAL — INTERIOR RENDER</text>
+</svg>

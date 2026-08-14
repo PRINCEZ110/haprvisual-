@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 900" role="img" aria-label="Abstract 3D furniture render placeholder">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#EFE7D8"/>
+      <stop offset="1" stop-color="#E2D7C2"/>
+    </linearGradient>
+    <linearGradient id="chairTop" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#A9957E"/>
+      <stop offset="1" stop-color="#8A7A68"/>
+    </linearGradient>
+    <linearGradient id="chairSeat" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#7D6B58"/>
+      <stop offset="1" stop-color="#665647"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="900" fill="url(#bg)"/>
+  <line x1="0" y1="760" x2="1200" y2="760" stroke="#C9B89D" stroke-width="3"/>
+  <ellipse cx="600" cy="790" rx="380" ry="48" fill="#3B2F26" opacity="0.3"/>
+
+  <g transform="translate(600,330)">
+    <rect x="-150" y="70" width="300" height="150" rx="16" fill="url(#chairSeat)"/>
+    <path d="M-150 220 L-150 300 L-96 300 L-96 260 Q-96 220 -56 220 Z" fill="#665647"/>
+    <path d="M150 220 L150 300 L96 300 L96 260 Q96 220 56 220 Z" fill="#665647"/>
+    <path d="M-110 70 L-110 -170 Q-110 -220 -60 -220 L60 -220 Q110 -220 110 -170 L110 70 Z" fill="url(#chairTop)"/>
+    <rect x="-36" y="70" width="72" height="22" rx="11" fill="#BFA98C"/>
+    <rect x="-152" y="70" width="40" height="130" rx="10" fill="url(#chairTop)"/>
+    <rect x="112" y="70" width="40" height="130" rx="10" fill="url(#chairTop)"/>
+  </g>
+
+  <text x="60" y="852" font-family="Helvetica, Arial, sans-serif" font-size="22" letter-spacing="6" fill="#6E5F4E" opacity="0.75">HAPR VISUAL — FURNITURE RENDER</text>
+</svg>

@@ -1,0 +1,44 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: #f5f0e8;
+  color: #171410;
+  font-family: var(--font-inter), "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+::selection {
+  background: #241e18;
+  color: #f5f0e8;
+}
+
+@layer components {
+  .container-hapr {
+    @apply mx-auto w-full max-w-[1440px] px-5 lg:px-10;
+  }
+
+  .pill {
+    @apply inline-flex items-center gap-2 rounded-full bg-ink px-6 py-3 text-sm text-cream transition-colors hover:bg-coffee;
+  }
+
+  .field {
+    @apply w-full border border-line bg-white/50 px-4 py-3.5 text-ink transition-colors placeholder:text-ink/40 focus:border-ink focus:outline-none;
+  }
+
+  .field-label {
+    @apply mb-2 block text-[11px] uppercase tracking-[0.2em] text-muted;
+  }
+
+  .eyebrow {
+    @apply text-[11px] uppercase tracking-[0.25em] text-muted;
+  }
+}

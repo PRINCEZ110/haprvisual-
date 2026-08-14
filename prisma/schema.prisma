@@ -1,0 +1,51 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Project {
+  id          String         @id @default(cuid())
+  title       String
+  year        String
+  description String
+  coverImage  String
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+  images      ProjectImage[]
+  categories  Category[]
+}
+
+model ProjectImage {
+  id        String  @id @default(cuid())
+  url       String
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  projectId String
+}
+
+model Category {
+  id       String    @id @default(cuid())
+  name     String    @unique
+  projects Project[]
+}
+
+model Service {
+  id          String @id @default(cuid())
+  title       String
+  description String
+  order       Int    @unique
+}
+
+model ContactSubmission {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  service   String
+  budget    String
+  message   String?
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
