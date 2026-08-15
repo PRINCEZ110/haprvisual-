@@ -22,15 +22,42 @@ const REELS = [
     video: "/videos/reel-03.mp4",
     objectPosition: "center center",
   },
+  {
+    id: 4,
+    title: "Reel 04",
+    video: "/videos/reel-04.mp4",
+    objectPosition: "center center",
+  },
+  {
+    id: 5,
+    title: "Reel 05",
+    video: "/videos/reel-05.mp4",
+    objectPosition: "center center",
+  },
+  {
+    id: 6,
+    title: "Reel 06",
+    video: "/videos/reel-06.mp4",
+    objectPosition: "center center",
+  },
+  {
+    id: 7,
+    title: "Reel 07",
+    video: "/videos/reel-07.mp4",
+    objectPosition: "center center",
+  },
 ];
 
 const SLASH = 2.2;
+const SLASH2 = 1.8;
 const EASE = [0.22, 0.61, 0.36, 1] as const;
 
 const CLIPS = [
   `polygon(0 0, calc(33.333% - ${SLASH}%) 0, calc(33.333% + ${SLASH}%) 100%, 0 100%)`,
   `polygon(calc(33.333% - ${SLASH}%) 0, calc(66.667% - ${SLASH}%) 0, calc(66.667% + ${SLASH}%) 100%, calc(33.333% + ${SLASH}%) 100%)`,
   `polygon(calc(66.667% - ${SLASH}%) 0, 100% 0, 100% 100%, calc(66.667% + ${SLASH}%) 100%)`,
+  `polygon(0 0, calc(50% - ${SLASH2}%) 0, calc(50% + ${SLASH2}%) 100%, 0 100%)`,
+  `polygon(calc(50% - ${SLASH2}%) 0, 100% 0, 100% 100%, calc(50% + ${SLASH2}%) 100%)`,
 ];
 
 function ReelPanel({
@@ -99,7 +126,13 @@ function ReelPanel({
   );
 }
 
-function DiagonalDivider({ left }: { left: string }) {
+function DiagonalDivider({
+  left,
+  deg = 4.5,
+}: {
+  left: string;
+  deg?: number;
+}) {
   return (
     <motion.div
       aria-hidden="true"
@@ -110,8 +143,50 @@ function DiagonalDivider({ left }: { left: string }) {
       viewport={{ once: true, amount: 0.3 }}
       transition={{ duration: 1.2, ease: EASE, delay: 0.5 }}
     >
-      <div className="h-full w-full origin-center -rotate-[4.5deg] bg-gradient-to-b from-cream/80 via-cream/90 to-cream/80 [box-shadow:0_0_14px_rgba(255,255,255,0.35),0_0_40px_rgba(0,0,0,0.6)]" />
+      <div
+        className="h-full w-full origin-center bg-gradient-to-b from-cream/80 via-cream/90 to-cream/80 [box-shadow:0_0_14px_rgba(255,255,255,0.35),0_0_40px_rgba(0,0,0,0.6)]"
+        style={{ transform: `rotate(-${deg}deg)` }}
+      />
     </motion.div>
+  );
+}
+
+function SectionTitle({
+  left,
+  right,
+  mobile = false,
+}: {
+  left: string;
+  right: string;
+  mobile?: boolean;
+}) {
+  return (
+    <div
+      className={`pointer-events-none absolute inset-x-0 top-0 z-30 ${
+        mobile ? "lg:hidden" : "hidden lg:block"
+      }`}
+    >
+      <div
+        className={`flex items-start justify-between ${
+          mobile ? "px-6 pt-7" : "px-10 pt-10"
+        }`}
+      >
+        <p
+          className={`font-medium uppercase tracking-[0.4em] text-cream/85 ${
+            mobile ? "text-[11px]" : "text-xs"
+          }`}
+        >
+          {left}
+        </p>
+        <p
+          className={`uppercase tracking-[0.3em] text-cream/55 ${
+            mobile ? "text-[10px]" : "text-[11px]"
+          }`}
+        >
+          {right}
+        </p>
+      </div>
+    </div>
   );
 }
 
@@ -119,15 +194,47 @@ export default function ShowReels() {
   return (
     <section
       aria-label="Show reels — cinematic video showcase"
-      className="group/reels relative h-[100svh] overflow-hidden bg-black"
+      className="group/reels relative bg-black"
     >
-      <div className="absolute inset-0 hidden lg:grid lg:grid-cols-3">
-        {REELS.map((reel, i) => (
-          <ReelPanel key={reel.id} reel={reel} index={i} clip={CLIPS[i]} />
-        ))}
+      <div className="hidden lg:block">
+        <div className="relative h-[100svh] overflow-hidden">
+          <div className="absolute inset-0 grid grid-cols-3">
+            {REELS.slice(0, 3).map((reel, i) => (
+              <ReelPanel key={reel.id} reel={reel} index={i} clip={CLIPS[i]} />
+            ))}
+          </div>
+          <DiagonalDivider left="33.333%" />
+          <DiagonalDivider left="66.667%" />
+          <SectionTitle left="Show Reels" right="01 — 03" />
+        </div>
+
+        <div className="relative h-[100svh] overflow-hidden">
+          <div className="absolute inset-0 grid grid-cols-2 grid-rows-2">
+            {REELS.slice(3, 7).map((reel, i) => (
+              <ReelPanel
+                key={reel.id}
+                reel={reel}
+                index={i + 3}
+                clip={CLIPS[3 + (i % 2)]}
+              />
+            ))}
+          </div>
+          <DiagonalDivider left="50%" deg={3.7} />
+          <motion.div
+            aria-hidden="true"
+            className="absolute left-0 top-1/2 z-10 h-px w-full lg:h-[2px]"
+            initial={{ opacity: 0, scaleX: 0.6 }}
+            whileInView={{ opacity: 1, scaleX: 1 }}
+            viewport={{ once: true, amount: 0.3 }}
+            transition={{ duration: 1.2, ease: EASE, delay: 0.5 }}
+          >
+            <div className="h-full w-full bg-gradient-to-r from-cream/80 via-cream/90 to-cream/80 [box-shadow:0_0_14px_rgba(255,255,255,0.35)]" />
+          </motion.div>
+          <SectionTitle left="Show Reels — 02" right="04 — 07" />
+        </div>
       </div>
 
-      <div className="flex h-[300svh] flex-col lg:hidden">
+      <div className="flex flex-col lg:hidden">
         {REELS.map((reel, i) => (
           <div key={reel.id} className="relative h-[100svh] overflow-hidden">
             {i > 0 && (
@@ -143,36 +250,16 @@ export default function ShowReels() {
         ))}
       </div>
 
+      <SectionTitle left="Show Reels" right="01 — 07" mobile />
+
       <motion.div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 z-20 bg-black"
         initial={{ opacity: 0.4 }}
         whileInView={{ opacity: 0 }}
-        viewport={{ once: true, amount: 0.35 }}
+        viewport={{ once: true, amount: 0.2 }}
         transition={{ duration: 1.3, ease: "easeOut" }}
       />
-
-      <div className="pointer-events-none absolute inset-x-0 top-0 z-30 hidden lg:block">
-        <div className="flex items-start justify-between px-10 pt-10">
-          <p className="text-xs font-medium uppercase tracking-[0.4em] text-cream/85">
-            Show Reels
-          </p>
-          <p className="text-[11px] uppercase tracking-[0.3em] text-cream/55">
-            01 — 03
-          </p>
-        </div>
-      </div>
-
-      <div className="pointer-events-none absolute inset-x-0 top-0 z-30 lg:hidden">
-        <div className="flex items-start justify-between px-6 pt-7">
-          <p className="text-[11px] font-medium uppercase tracking-[0.35em] text-cream/85">
-            Show Reels
-          </p>
-          <p className="text-[10px] uppercase tracking-[0.3em] text-cream/55">
-            01 — 03
-          </p>
-        </div>
-      </div>
     </section>
   );
 }
