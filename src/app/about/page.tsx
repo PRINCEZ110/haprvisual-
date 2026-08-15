@@ -58,11 +58,14 @@ export default function AboutPage() {
         <Reveal delay={0.1}>
           <div className="mt-14 grid gap-10 lg:grid-cols-12">
             <div className="lg:col-span-5">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="/images/render-interior.svg"
-                alt="Interior 3D render by HAPR Visual"
-                className="w-full cursor-crosshair"
+              <video
+                src="/videos/about-expertise.mp4"
+                controls
+                autoPlay
+                muted
+                loop
+                playsInline
+                className="w-full"
               />
             </div>
             <div className="flex flex-col justify-center lg:col-span-6 lg:col-start-7">
@@ -125,11 +128,14 @@ export default function AboutPage() {
               </div>
             </div>
             <div className="lg:col-span-4 lg:col-start-9">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="/images/render-chair.svg"
-                alt="Furniture 3D render by HAPR Visual"
-                className="w-full cursor-crosshair"
+              <video
+                src="/videos/about-studio.mp4"
+                controls
+                autoPlay
+                muted
+                loop
+                playsInline
+                className="w-full"
               />
             </div>
           </div>

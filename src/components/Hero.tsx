@@ -46,7 +46,7 @@ export default function Hero() {
             animate="show"
           >
             <motion.p variants={item} className="eyebrow">
-              — Kyiv, Ukraine
+              — KTM, Nepal
             </motion.p>
 
             <motion.h1

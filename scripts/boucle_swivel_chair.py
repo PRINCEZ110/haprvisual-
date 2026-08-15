@@ -129,17 +129,21 @@ def build_chair_metaballs():
 
 def metaball_to_clean_mesh(mb_obj, name='BoucleChair'):
     # Force an update / depsgraph eval, then convert to mesh
+    bpy.ops.object.select_all(action='DESELECT')
+    mb_obj.select_set(True)
     bpy.context.view_layer.objects.active = mb_obj
     bpy.ops.object.convert(target='MESH')
     mesh_obj = bpy.context.view_layer.objects.active
     mesh_obj.name = name
 
-    # Clean topology a bit + smooth shading
-    bpy.ops.object.mode_set(mode='EDIT')
-    bpy.ops.mesh.select_all(action='SELECT')
-    bpy.ops.mesh.remove_doubles(threshold=0.001)
-    bpy.ops.mesh.normals_make_consistent(inside=False)
-    bpy.ops.object.mode_set(mode='OBJECT')
+    # Clean topology a bit + smooth shading (bmesh — works headless on all versions)
+    import bmesh
+    bm = bmesh.new()
+    bm.from_mesh(mesh_obj.data)
+    bmesh.ops.remove_doubles(bm, verts=bm.verts, dist=0.001)
+    bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
+    bm.to_mesh(mesh_obj.data)
+    bm.free()
 
     # Subsurf for extra smoothness on the render
     mod = mesh_obj.modifiers.new('Subsurf', 'SUBSURF')
