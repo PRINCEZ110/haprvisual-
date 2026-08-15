@@ -85,10 +85,10 @@ function ReelPanel({
           preload="metadata"
           aria-hidden="true"
           tabIndex={-1}
-          className="h-full w-full object-cover transition-[transform,filter,opacity] duration-[600ms] ease-[cubic-bezier(0.22,0.61,0.36,1)] group-hover/reels:opacity-75 group-hover/reels:group-hover/panel:scale-[1.12] group-hover/reels:group-hover/panel:opacity-100 group-hover/reels:group-hover/panel:brightness-105"
+          className="h-full w-full object-cover brightness-[1.08] transition-[transform,filter,opacity] duration-[600ms] ease-[cubic-bezier(0.22,0.61,0.36,1)] group-hover/reels:opacity-75 group-hover/reels:group-hover/panel:scale-[1.12] group-hover/reels:group-hover/panel:opacity-100 group-hover/reels:group-hover/panel:brightness-105"
         />
       </motion.div>
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-black/20" />
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-black/10" />
       <span className="absolute left-[6%] top-[7%] text-[11px] font-medium uppercase tracking-[0.35em] text-cream/75 lg:left-8 lg:top-8 lg:text-xs">
         {String(index + 1).padStart(2, "0")}
       </span>
@@ -216,10 +216,10 @@ export default function ShowReels() {
       <motion.div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 z-20 bg-black"
-        initial={{ opacity: 0.4 }}
+        initial={{ opacity: 0.2 }}
         whileInView={{ opacity: 0 }}
         viewport={{ once: true, amount: 0.2 }}
-        transition={{ duration: 1.3, ease: "easeOut" }}
+        transition={{ duration: 1, ease: "easeOut" }}
       />
     </section>
   );
