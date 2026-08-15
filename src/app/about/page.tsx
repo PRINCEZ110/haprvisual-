@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import AutoVideo from "@/components/AutoVideo";
 import Reveal from "@/components/Reveal";
 import { CONTACT_COPY } from "@/lib/constants";
 
@@ -108,12 +109,8 @@ export default function AboutPage() {
           <div className="mt-20 grid gap-12 lg:grid-cols-12">
             <div className="lg:col-span-6">
               <div className="border border-line bg-cream-dark p-3 lg:p-4">
-                <video
+                <AutoVideo
                   src="/videos/about-expertise.mp4"
-                  autoPlay
-                  muted
-                  loop
-                  playsInline
                   className="w-full"
                 />
                 <div className="flex items-center justify-between gap-4 px-1 pb-1 pt-4">
@@ -219,14 +216,7 @@ export default function AboutPage() {
             </div>
             <div className="lg:col-span-4 lg:col-start-9">
               <div className="border border-line bg-cream-dark p-3 lg:p-4">
-                <video
-                  src="/videos/about-studio.mp4"
-                  autoPlay
-                  muted
-                  loop
-                  playsInline
-                  className="w-full"
-                />
+                <AutoVideo src="/videos/about-studio.mp4" className="w-full" />
                 <div className="px-1 pb-1 pt-4">
                   <p className="eyebrow">Studio film — 02</p>
                   <p className="mt-1 text-sm text-muted">

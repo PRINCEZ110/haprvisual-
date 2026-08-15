@@ -49,6 +49,19 @@ export default function HoverVideo({ src, poster, alt, sizes }: Props) {
           video.currentTime = 0;
         }
       }}
+      onClick={(e) => {
+        if (!window.matchMedia("(pointer: coarse)").matches) return;
+        e.preventDefault();
+        e.stopPropagation();
+        const video = videoRef.current;
+        if (!video) return;
+        if (video.paused) {
+          video.play().catch(() => {});
+        } else {
+          video.pause();
+          video.currentTime = 0;
+        }
+      }}
     >
       <video
         ref={videoRef}
@@ -65,6 +78,11 @@ export default function HoverVideo({ src, poster, alt, sizes }: Props) {
         tabIndex={-1}
         poster={poster}
         src={show ? src : undefined}
+        onEnded={(e) => {
+          const v = e.currentTarget;
+          v.currentTime = 0;
+          v.play().catch(() => {});
+        }}
         onError={() => {
           if (!retried.current) {
             retried.current = true;

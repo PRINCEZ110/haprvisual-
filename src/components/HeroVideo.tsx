@@ -23,7 +23,13 @@ export default function HeroVideo() {
         muted
         loop
         playsInline
+        webkit-playsinline=""
         preload="auto"
+        onEnded={(e) => {
+          const v = e.currentTarget;
+          v.currentTime = 0;
+          v.play().catch(() => {});
+        }}
       />
       <div className="pointer-events-none absolute inset-0 select-none bg-black/15" />
     </div>

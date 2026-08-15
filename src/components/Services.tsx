@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { AnimatePresence, motion, useMotionValue } from "framer-motion";
+import AutoVideo from "@/components/AutoVideo";
 import { IconChevron } from "@/components/icons";
 import { SERVICE_PANEL_VIDEOS, SERVICE_THUMBNAILS, SERVICE_VIDEOS } from "@/lib/constants";
 import type { ServiceItem } from "@/lib/data";
@@ -198,7 +199,7 @@ export default function Services({ services }: { services: ServiceItem[] }) {
                           initial={{ clipPath: "inset(0 0 100% 0)" }}
                           animate={{ clipPath: "inset(0 0 0% 0)" }}
                           transition={{ duration: 0.9, ease: EASE, delay: 0.2 }}
-                          className="hidden grid-cols-2 gap-4 lg:grid"
+                          className="grid grid-cols-2 gap-4"
                         >
                           {(SERVICE_PANEL_VIDEOS[service.title] ?? []).map(
                             (videoSrc) => (
@@ -206,15 +207,8 @@ export default function Services({ services }: { services: ServiceItem[] }) {
                                 key={videoSrc}
                                 className="relative aspect-[4/3] overflow-hidden bg-ink"
                               >
-                                <video
+                                <AutoVideo
                                   src={videoSrc}
-                                  autoPlay
-                                  muted
-                                  loop
-                                  playsInline
-                                  preload="auto"
-                                  aria-hidden="true"
-                                  tabIndex={-1}
                                   className="h-full w-full object-cover"
                                 />
                               </div>
@@ -267,15 +261,8 @@ export default function Services({ services }: { services: ServiceItem[] }) {
               className="w-[360px]"
             >
               <div className="relative aspect-video overflow-hidden bg-ink">
-                <video
+                <AutoVideo
                   src={SERVICE_VIDEOS[services[preview].title]}
-                  autoPlay
-                  muted
-                  loop
-                  playsInline
-                  preload="auto"
-                  aria-hidden="true"
-                  tabIndex={-1}
                   className="h-full w-full object-cover"
                 />
               </div>
