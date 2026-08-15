@@ -11,6 +11,10 @@ export default {
         coffee: "#241E18",
         muted: "#7A7066",
         line: "#E0D8CA",
+        blush: "#F7ECE8",
+        espresso: "#241D19",
+        "blush-line": "#E7D9D3",
+        clay: "#8F7770",
       },
       fontFamily: {
         sans: [

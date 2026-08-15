@@ -61,6 +61,9 @@ export default function HoverVideo({ src, poster, alt, sizes }: Props) {
         controlsList="nodownload noremoteplayback noplaybackrate"
         disablePictureInPicture
         draggable={false}
+        aria-hidden="true"
+        tabIndex={-1}
+        poster={poster}
         src={show ? src : undefined}
         onError={() => {
           if (!retried.current) {

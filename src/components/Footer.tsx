@@ -13,8 +13,8 @@ const STUDIO_LINKS = [
 
 const SOCIALS = [
   { label: "Instagram", href: "https://www.instagram.com/haprvisual/" },
-  { label: "LinkedIn", href: "#" },
-  { label: "Behance", href: "#" },
+  { label: "LinkedIn", href: null },
+  { label: "Behance", href: null },
 ];
 
 const RIGHTS_LINKS = [
@@ -60,15 +60,24 @@ export default function Footer() {
           <ul className="mt-5 space-y-3">
             {SOCIALS.map((social) => (
               <li key={social.label}>
-                <a
-                  href={social.href}
-                  target={social.href.startsWith("http") ? "_blank" : undefined}
-                  rel="noreferrer"
-                  className="inline-flex items-center gap-2 text-sm text-cream/70 transition-colors hover:text-cream"
-                >
-                  {social.label}
-                  <IconArrowUpRight className="h-3.5 w-3.5 text-cream/40" />
-                </a>
+                {social.href ? (
+                  <a
+                    href={social.href}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-2 text-sm text-cream/70 transition-colors hover:text-cream"
+                  >
+                    {social.label}
+                    <IconArrowUpRight className="h-3.5 w-3.5 text-cream/40" />
+                  </a>
+                ) : (
+                  <span className="inline-flex items-center gap-2 text-sm text-cream/50">
+                    {social.label}
+                    <span className="text-[10px] uppercase tracking-[0.15em] text-cream/30">
+                      Soon
+                    </span>
+                  </span>
+                )}
               </li>
             ))}
           </ul>

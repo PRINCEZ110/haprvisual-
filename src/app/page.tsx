@@ -10,11 +10,11 @@ export default async function HomePage() {
   const [projects, services] = await Promise.all([getProjects(), getServices()]);
 
   return (
-    <main>
+    <>
       <Hero />
       <Projects projects={projects} />
       <Services services={services} />
       <Contact />
-    </main>
+    </>
   );
 }

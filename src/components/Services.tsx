@@ -24,7 +24,7 @@ export default function Services({ services }: { services: ServiceItem[] }) {
   const clamp = (v: number, min: number, max: number) =>
     Math.min(Math.max(v, min), max);
 
-useEffect(() => {
+  useEffect(() => {
     let raf = 0;
     const tick = () => {
       raf = requestAnimationFrame(tick);
@@ -213,6 +213,8 @@ useEffect(() => {
                                   loop
                                   playsInline
                                   preload="auto"
+                                  aria-hidden="true"
+                                  tabIndex={-1}
                                   className="h-full w-full object-cover"
                                 />
                               </div>
@@ -272,6 +274,8 @@ useEffect(() => {
                   loop
                   playsInline
                   preload="auto"
+                  aria-hidden="true"
+                  tabIndex={-1}
                   className="h-full w-full object-cover"
                 />
               </div>

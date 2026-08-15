@@ -22,20 +22,20 @@ export default function Navbar() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.8 }}
-        className="fixed inset-x-0 top-0 z-50 border-b border-[#E7D9D3] bg-[#F7ECE8]"
+        className="fixed inset-x-0 top-0 z-50 border-b border-blush-line bg-blush"
       >
-        <div className="container-hapr flex h-11 items-center justify-between">
+        <div className="container-hapr flex h-14 items-center justify-between">
           <Logo />
 
           <nav
-            className="hidden items-center gap-8 lg:flex"
+            className="hidden items-center gap-8 md:flex"
             aria-label="Main"
           >
             {NAV_LINKS.map((link) => (
               <a
                 key={link.label}
                 href={link.href}
-                className="text-xs font-medium tracking-wide text-[#211D1A]/80 transition-colors hover:text-[#211D1A]"
+                className="text-xs font-medium tracking-wide text-espresso/80 transition-colors hover:text-espresso"
               >
                 {link.label}
               </a>
@@ -45,7 +45,7 @@ export default function Navbar() {
           <div className="flex items-center gap-4">
             <a
               href="#contact-form"
-              className="hidden bg-[#211D1A] px-3.5 py-2 text-xs font-medium text-white transition-colors hover:bg-[#3A342F] md:inline-block"
+              className="hidden bg-espresso px-3.5 py-2 text-xs font-medium text-white transition-colors hover:bg-coffee md:inline-block"
               style={{ borderRadius: 2 }}
             >
               Discuss a project
@@ -54,8 +54,9 @@ export default function Navbar() {
             <button
               type="button"
               onClick={() => setMenuOpen(true)}
-              className="text-[#211D1A] lg:hidden"
+              className="text-espresso md:hidden"
               aria-label="Open menu"
+              aria-expanded={menuOpen}
             >
               <IconMenu className="h-5 w-5" />
             </button>

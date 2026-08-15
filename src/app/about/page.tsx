@@ -51,7 +51,7 @@ const FOCUS = [
 
 export default function AboutPage() {
   return (
-    <main className="pt-28 lg:pt-36">
+    <div className="pt-28 lg:pt-36">
       <section className="container-hapr">
         <Reveal>
           <div className="grid gap-12 lg:grid-cols-12">
@@ -77,7 +77,9 @@ export default function AboutPage() {
                   <dt className="text-[11px] uppercase tracking-[0.2em] text-muted">
                     Based
                   </dt>
-                  <dd className="mt-2 text-sm font-medium">KTM, Nepal</dd>
+                  <dd className="mt-2 text-sm font-medium">
+                    {CONTACT_COPY.location}
+                  </dd>
                 </div>
                 <div>
                   <dt className="text-[11px] uppercase tracking-[0.2em] text-muted">
@@ -129,11 +131,11 @@ export default function AboutPage() {
             </div>
             <div className="flex flex-col justify-center lg:col-span-5 lg:col-start-8">
               <p className="text-base leading-relaxed text-muted">
-                HAPR Visual is a studio from KTM delivering premium 3D renders
-                for companies in architecture, product design, and interior
-                design. From a single product visual to a full-scale
-                architectural visualization, we bring precision and artistic
-                vision to every frame.
+                HAPR Visual is a studio from {CONTACT_COPY.location} delivering
+                premium 3D renders for companies in architecture, product
+                design, and interior design. From a single product visual to a
+                full-scale architectural visualization, we bring precision and
+                artistic vision to every frame.
               </p>
               <ul className="mt-10 border-t border-line">
                 {FOCUS.map((item, i) => (
@@ -251,6 +253,6 @@ export default function AboutPage() {
           </Reveal>
         </div>
       </section>
-    </main>
+    </div>
   );
 }

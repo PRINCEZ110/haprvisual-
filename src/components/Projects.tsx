@@ -15,7 +15,8 @@ const INK = "#241D19";
 const MUTED = "#8F7770";
 const HAIRLINE = "border-[rgba(60,40,30,0.12)]";
 const RULE = "bg-[rgba(60,40,30,0.18)]";
-const FRAME = "pointer-events-none absolute inset-0 outline outline-1 outline-offset-[-10px] outline-[rgba(60,40,30,0.16)]";
+const FRAME =
+  "pointer-events-none absolute inset-0 outline outline-1 outline-offset-[-10px] outline-[rgba(60,40,30,0.16)]";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 24 },
@@ -293,7 +294,7 @@ export default function Projects({
   }, [blocks]);
 
   return (
-    <section id="projects" className="bg-[#F7ECE8]">
+    <section id="projects" className="bg-blush">
       <div className="container-hapr py-20 lg:py-28">
         <div className="mb-12 lg:mb-20">
           <div className="flex items-end justify-between gap-6">

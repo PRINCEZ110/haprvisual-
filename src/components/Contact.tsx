@@ -121,6 +121,7 @@ export default function Contact() {
                 id="name"
                 type="text"
                 required
+                autoComplete="name"
                 value={form.name}
                 onChange={set("name")}
                 className="field"
@@ -136,6 +137,7 @@ export default function Contact() {
                 id="email"
                 type="email"
                 required
+                autoComplete="email"
                 value={form.email}
                 onChange={set("email")}
                 className="field"
