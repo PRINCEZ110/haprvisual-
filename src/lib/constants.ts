@@ -58,12 +58,29 @@ export const CONTACT_COPY = {
   rights: "HAPR® 2024. All rights reserved",
 } as const;
 
+export const SERVICE_VIDEOS: Record<string, string> = {
+  "3D product rendering": "/videos/product-render.mp4",
+  "Interior rendering":
+    "https://videos.pexels.com/video-files/29466038/12684293_1920_1080_60fps.mp4",
+  "Exterior rendering":
+    "https://videos.pexels.com/video-files/17224760/17224760-hd_1920_1080_30fps.mp4",
+  "3D modelling":
+    "https://videos.pexels.com/video-files/29466021/12684208_1920_1080_60fps.mp4",
+  Animation:
+    "https://videos.pexels.com/video-files/18531414/18531414-hd_1920_1080_60fps.mp4",
+};
+
+export const SERVICE_PANEL_VIDEOS: Record<string, string[]> = {
+  "3D product rendering": [
+    "/videos/service-product-panel-1.mp4",
+    "/videos/service-product-panel-2.mp4",
+  ],
+};
+
 export const SERVICE_THUMBNAILS = [
   {
-    image1:
-      "https://images.unsplash.com/photo-1600121848594-d8644e57abab?auto=format&fit=crop&w=900&q=80",
-    image2:
-      "https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?auto=format&fit=crop&w=900&q=80",
+    image1: "/images/service-product-1.jpg",
+    image2: "/images/service-product-2.jpg",
   },
   {
     image1:

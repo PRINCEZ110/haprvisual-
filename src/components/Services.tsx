@@ -1,74 +1,149 @@
 "use client";
 
-import { useState, type ReactNode } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useMotionValue } from "framer-motion";
 import { IconChevron } from "@/components/icons";
-import { SERVICE_THUMBNAILS } from "@/lib/constants";
+import { SERVICE_PANEL_VIDEOS, SERVICE_THUMBNAILS, SERVICE_VIDEOS } from "@/lib/constants";
 import type { ServiceItem } from "@/lib/data";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 
-function MaskedText({
-  children,
-  delay = 0,
-}: {
-  children: ReactNode;
-  delay?: number;
-}) {
-  return (
-    <span className="block overflow-hidden">
-      <motion.span
-        className="block"
-        initial={{ y: "110%" }}
-        whileInView={{ y: 0 }}
-        viewport={{ once: true, margin: "-60px" }}
-        transition={{ duration: 1, ease: EASE, delay }}
-      >
-        {children}
-      </motion.span>
-    </span>
-  );
-}
-
 export default function Services({ services }: { services: ServiceItem[] }) {
   const [openIndex, setOpenIndex] = useState<number>(0);
+  const [preview, setPreview] = useState<number | null>(null);
+  const mx = useMotionValue(-9999);
+  const my = useMotionValue(-9999);
+  const panelContentRef = useRef<HTMLDivElement>(null);
+  const titleRectRef = useRef<DOMRect | null>(null);
+  const targetRef = useRef({ x: -9999, y: -9999 });
+  const WINDOW_W = 360;
+  const WINDOW_H = 220;
+  const GAP = 24;
+
+  const clamp = (v: number, min: number, max: number) =>
+    Math.min(Math.max(v, min), max);
+
+useEffect(() => {
+    let raf = 0;
+    const tick = () => {
+      raf = requestAnimationFrame(tick);
+      if (preview === null) return;
+      const cx = targetRef.current.x;
+      const cy = targetRef.current.y;
+      const panelRect = panelContentRef.current?.getBoundingClientRect();
+      const titleRect = titleRectRef.current;
+      const obstacles = [panelRect, titleRect].filter(
+        (r): r is DOMRect => !!r
+      );
+
+      const overlaps = (px: number, py: number) =>
+        obstacles.some(
+          (o) =>
+            px < o.right &&
+            px + WINDOW_W > o.left &&
+            py < o.bottom &&
+            py + WINDOW_H > o.top
+        );
+
+      const fits = (px: number, py: number) =>
+        px >= 16 &&
+        px + WINDOW_W <= window.innerWidth - 16 &&
+        py >= 16 &&
+        py + WINDOW_H <= window.innerHeight - 16;
+
+      const candidates: [number, number][] = [
+        [cx - WINDOW_W - GAP, clamp(cy - WINDOW_H / 2, 16, window.innerHeight - WINDOW_H - 16)],
+        [cx + GAP, clamp(cy - WINDOW_H / 2, 16, window.innerHeight - WINDOW_H - 16)],
+        [clamp(cx - WINDOW_W / 2, 16, window.innerWidth - WINDOW_W - 16), cy - WINDOW_H - GAP],
+        [clamp(cx - WINDOW_W / 2, 16, window.innerWidth - WINDOW_W - 16), cy + GAP],
+      ];
+
+      let placed = false;
+      for (const [px, py] of candidates) {
+        if (!fits(px, py)) continue;
+        if (!overlaps(px, py)) {
+          mx.set(px);
+          my.set(py);
+          placed = true;
+          break;
+        }
+      }
+      if (!placed) setPreview(null);
+    };
+    tick();
+    return () => cancelAnimationFrame(raf);
+  }, [preview, mx, my]);
+
+  const handleMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const idx = Number(e.currentTarget.dataset.index ?? 0);
+    if (openIndex === idx) {
+      setPreview(null);
+      return;
+    }
+    const cx = e.clientX;
+    const cy = e.clientY;
+    targetRef.current = { x: cx, y: cy };
+    titleRectRef.current =
+      e.currentTarget.querySelector("[data-title]")?.getBoundingClientRect() ??
+      null;
+    const panelRect = panelContentRef.current?.getBoundingClientRect();
+    const insidePanel =
+      panelRect &&
+      cx > panelRect.left &&
+      cx < panelRect.right &&
+      cy > panelRect.top &&
+      cy < panelRect.bottom;
+    if (insidePanel) {
+      setPreview(null);
+      return;
+    }
+    setPreview(idx);
+  };
 
   return (
     <section id="services" className="container-hapr py-24 lg:py-32">
-      <div className="mb-14 lg:mb-20">
-        <div className="flex items-end justify-between gap-6">
-          <div>
-            <p className="eyebrow">What We Do</p>
-            <h2 className="mt-3 font-serif text-5xl italic text-ink lg:text-6xl">
-              <MaskedText>Services</MaskedText>
-            </h2>
-          </div>
-          <p className="pb-2 text-[10px] uppercase tracking-[0.25em] text-muted">
-            {String(services.length).padStart(2, "0")} offerings
-          </p>
-        </div>
-        <motion.div
-          initial={{ scaleX: 0 }}
-          whileInView={{ scaleX: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 1.4, ease: EASE, delay: 0.15 }}
-          className="mt-12 h-px origin-left bg-line"
-        />
+      <div className="mb-14 text-center lg:mb-20">
+        <h2 className="font-serif text-5xl italic text-ink lg:text-6xl">
+          <span className="block overflow-hidden">
+            <motion.span
+              className="block"
+              initial={{ y: "110%" }}
+              animate={{ y: 0 }}
+              transition={{ duration: 1, ease: EASE }}
+            >
+              Services
+            </motion.span>
+          </span>
+        </h2>
       </div>
 
       <div className="border-t border-line">
         {services.map((service, i) => {
           const open = openIndex === i;
           return (
-            <div key={service.id} className="border-b border-line">
+            <div
+              key={service.id}
+              data-index={i}
+              className="border-b border-line"
+              onMouseEnter={(e) => {
+                if (openIndex === i) return;
+                targetRef.current = { x: e.clientX, y: e.clientY };
+                setPreview(i);
+              }}
+              onMouseLeave={() => setPreview(null)}
+              onMouseMove={handleMove}
+            >
               <button
                 type="button"
                 onClick={() => setOpenIndex(open ? -1 : i)}
                 aria-expanded={open}
                 className="group flex w-full items-center justify-between gap-6 py-7 text-left lg:py-9"
               >
-                <div className="flex items-baseline gap-6 lg:gap-10">
+                <div
+                  data-title
+                  className="flex items-baseline gap-6 lg:gap-10"
+                >
                   <span
                     className={`font-serif text-sm italic transition-colors duration-300 ${
                       open ? "text-ink" : "text-muted"
@@ -99,6 +174,7 @@ export default function Services({ services }: { services: ServiceItem[] }) {
                 {open && (
                   <motion.div
                     key="panel"
+                    ref={panelContentRef}
                     initial={{ height: 0, opacity: 0 }}
                     animate={{ height: "auto", opacity: 1 }}
                     exit={{ height: 0, opacity: 0 }}
@@ -116,31 +192,55 @@ export default function Services({ services }: { services: ServiceItem[] }) {
                         </p>
                         <div className="mt-8 h-px w-12 bg-line" />
                       </motion.div>
-                      {SERVICE_THUMBNAILS[i % SERVICE_THUMBNAILS.length] && (
+                      {(SERVICE_THUMBNAILS[i % SERVICE_THUMBNAILS.length] ||
+                          SERVICE_PANEL_VIDEOS[service.title]) && (
                         <motion.div
                           initial={{ clipPath: "inset(0 0 100% 0)" }}
                           animate={{ clipPath: "inset(0 0 0% 0)" }}
                           transition={{ duration: 0.9, ease: EASE, delay: 0.2 }}
                           className="hidden grid-cols-2 gap-4 lg:grid"
                         >
-                          <div className="relative aspect-[4/3] overflow-hidden">
-                            <Image
-                              src={SERVICE_THUMBNAILS[i % SERVICE_THUMBNAILS.length].image1}
-                              alt={`${service.title} — example 1`}
-                              fill
-                              sizes="(max-width: 1024px) 0px, 25vw"
-                              className="object-cover"
-                            />
-                          </div>
-                          <div className="relative aspect-[4/3] overflow-hidden">
-                            <Image
-                              src={SERVICE_THUMBNAILS[i % SERVICE_THUMBNAILS.length].image2}
-                              alt={`${service.title} — example 2`}
-                              fill
-                              sizes="(max-width: 1024px) 0px, 25vw"
-                              className="object-cover"
-                            />
-                          </div>
+                          {(SERVICE_PANEL_VIDEOS[service.title] ?? []).map(
+                            (videoSrc) => (
+                              <div
+                                key={videoSrc}
+                                className="relative aspect-[4/3] overflow-hidden bg-ink"
+                              >
+                                <video
+                                  src={videoSrc}
+                                  autoPlay
+                                  muted
+                                  loop
+                                  playsInline
+                                  preload="auto"
+                                  className="h-full w-full object-cover"
+                                />
+                              </div>
+                            )
+                          )}
+                          {!SERVICE_PANEL_VIDEOS[service.title] &&
+                            SERVICE_THUMBNAILS[i % SERVICE_THUMBNAILS.length] && (
+                              <>
+                                <div className="relative aspect-[4/3] overflow-hidden">
+                                  <Image
+                                    src={SERVICE_THUMBNAILS[i % SERVICE_THUMBNAILS.length].image1}
+                                    alt={`${service.title} — example 1`}
+                                    fill
+                                    sizes="(max-width: 1024px) 0px, 25vw"
+                                    className="object-cover"
+                                  />
+                                </div>
+                                <div className="relative aspect-[4/3] overflow-hidden">
+                                  <Image
+                                    src={SERVICE_THUMBNAILS[i % SERVICE_THUMBNAILS.length].image2}
+                                    alt={`${service.title} — example 2`}
+                                    fill
+                                    sizes="(max-width: 1024px) 0px, 25vw"
+                                    className="object-cover"
+                                  />
+                                </div>
+                              </>
+                            )}
                         </motion.div>
                       )}
                     </div>
@@ -150,6 +250,40 @@ export default function Services({ services }: { services: ServiceItem[] }) {
             </div>
           );
         })}
+      </div>
+
+      <div className="pointer-events-none fixed left-0 top-0 z-40 hidden lg:block">
+        <AnimatePresence>
+          {preview !== null && services[preview] && (
+            <motion.div
+              key={services[preview].id}
+              style={{ x: mx, y: my }}
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              transition={{ duration: 0.3, ease: EASE }}
+              className="w-[360px]"
+            >
+              <div className="relative aspect-video overflow-hidden bg-ink">
+                <video
+                  src={SERVICE_VIDEOS[services[preview].title]}
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  preload="auto"
+                  className="h-full w-full object-cover"
+                />
+              </div>
+              <div className="mt-3 flex items-baseline gap-4">
+                <span className="text-[11px] uppercase tracking-[0.2em] text-ink">
+                  {String(preview + 1).padStart(2, "0")} —{" "}
+                  {services[preview].title}
+                </span>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </section>
   );
