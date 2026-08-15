@@ -3,6 +3,7 @@
 import { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import Hero3D from "@/components/Hero3D";
+import HeroVideo from "@/components/HeroVideo";
 
 const container = {
   hidden: {},
@@ -35,9 +36,11 @@ export default function Hero() {
       id="top"
       className="relative flex min-h-screen items-center overflow-hidden pt-28 pb-16 lg:pt-24"
     >
+      <HeroVideo />
+
       <motion.div
         style={{ y: textY, opacity: textOpacity }}
-        className="container-hapr grid items-center gap-10 lg:grid-cols-12"
+        className="container-hapr relative z-10 grid items-center gap-10 lg:grid-cols-12"
       >
         <div className="lg:col-span-7">
           <motion.div
