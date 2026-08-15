@@ -41,4 +41,13 @@ body {
   .eyebrow {
     @apply text-[11px] uppercase tracking-[0.25em] text-muted;
   }
+
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
 }
