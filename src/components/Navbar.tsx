@@ -1,10 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { motion } from "framer-motion";
 import Logo from "@/components/Logo";
-import Clock from "@/components/Clock";
 import MobileMenu from "@/components/MobileMenu";
-import { IconBehance, IconInstagram, IconLinkedIn, IconMenu } from "@/components/icons";
+import { IconMenu } from "@/components/icons";
 
 const NAV_LINKS = [
   { label: "Projects", href: "#projects" },
@@ -14,76 +14,54 @@ const NAV_LINKS = [
 ];
 
 export default function Navbar() {
-  const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
 
   return (
     <>
-      <header
-        className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
-          scrolled
-            ? "border-b border-line bg-cream/85 backdrop-blur-md"
-            : "border-b border-transparent bg-cream/0"
-        }`}
+      <motion.header
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.8 }}
+        className="fixed inset-x-0 top-0 z-50 border-b border-[#E7D9D3] bg-[#F7ECE8]"
       >
-        <div
-          className={`container-hapr flex items-center justify-between transition-all duration-300 ${
-            scrolled ? "h-16" : "h-20"
-          }`}
-        >
+        <div className="container-hapr flex h-11 items-center justify-between">
           <Logo />
 
-          <nav className="hidden items-center gap-8 lg:flex" aria-label="Main">
+          <nav
+            className="hidden items-center gap-8 lg:flex"
+            aria-label="Main"
+          >
             {NAV_LINKS.map((link) => (
               <a
                 key={link.label}
                 href={link.href}
-                className="text-sm text-ink/80 transition-colors hover:text-ink"
+                className="text-xs font-medium tracking-wide text-[#211D1A]/80 transition-colors hover:text-[#211D1A]"
               >
                 {link.label}
               </a>
             ))}
           </nav>
 
-          <div className="flex items-center gap-5">
-            <div className="hidden xl:block">
-              <Clock />
-            </div>
-
-            <div className="hidden items-center gap-4 text-muted md:flex">
-              <a href="https://www.instagram.com/haprvisual/" target="_blank" rel="noreferrer" className="transition-colors hover:text-ink" aria-label="Instagram">
-                <IconInstagram />
-              </a>
-              <a href="#" className="transition-colors hover:text-ink" aria-label="LinkedIn">
-                <IconLinkedIn />
-              </a>
-              <a href="#" className="transition-colors hover:text-ink" aria-label="Behance">
-                <IconBehance />
-              </a>
-            </div>
-
-            <a href="#contact-form" className="pill hidden md:inline-flex">
+          <div className="flex items-center gap-4">
+            <a
+              href="#contact-form"
+              className="hidden bg-[#211D1A] px-3.5 py-2 text-xs font-medium text-white transition-colors hover:bg-[#3A342F] md:inline-block"
+              style={{ borderRadius: 2 }}
+            >
               Discuss a project
             </a>
 
             <button
               type="button"
               onClick={() => setMenuOpen(true)}
-              className="text-ink lg:hidden"
+              className="text-[#211D1A] lg:hidden"
               aria-label="Open menu"
             >
-              <IconMenu className="h-6 w-6" />
+              <IconMenu className="h-5 w-5" />
             </button>
           </div>
         </div>
-      </header>
+      </motion.header>
 
       <MobileMenu open={menuOpen} onClose={() => setMenuOpen(false)} />
     </>

@@ -1,83 +1,37 @@
 "use client";
 
-import { useRef } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
-import Hero3D from "@/components/Hero3D";
+import { motion } from "framer-motion";
 import HeroVideo from "@/components/HeroVideo";
 
-const container = {
-  hidden: {},
-  show: { transition: { staggerChildren: 0.12, delayChildren: 0.15 } },
-};
-
-const item = {
-  hidden: { opacity: 0, y: 48 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.9, ease: [0.22, 1, 0.36, 1] as const } },
-};
-
 export default function Hero() {
-  const sectionRef = useRef<HTMLElement>(null);
-  const scroll = useRef(0);
-
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start start", "end start"],
-  });
-  scrollYProgress.on("change", (v) => {
-    scroll.current = v;
-  });
-
-  const textY = useTransform(scrollYProgress, [0, 1], [0, 120]);
-  const textOpacity = useTransform(scrollYProgress, [0, 0.7], [1, 0.2]);
-
   return (
     <section
-      ref={sectionRef}
       id="top"
-      className="relative flex min-h-screen items-center overflow-hidden pt-28 pb-16 lg:pt-24"
+      className="relative h-[100svh] min-h-[650px] overflow-hidden"
     >
       <HeroVideo />
 
-      <motion.div
-        style={{ y: textY, opacity: textOpacity }}
-        className="container-hapr relative z-10 grid items-center gap-10 lg:grid-cols-12"
-      >
-        <div className="lg:col-span-7">
-          <motion.div
-            variants={container}
-            initial="hidden"
-            animate="show"
+      <div className="absolute inset-0 z-10 flex -translate-y-[18%] items-center justify-center px-5 text-center">
+        <div>
+          <motion.h1
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
+            className="font-serif text-[clamp(2.75rem,5vw,4.5rem)] font-normal leading-[1.05] tracking-[-0.01em] text-white"
           >
-            <motion.p variants={item} className="eyebrow">
-              — KTM, Nepal
-            </motion.p>
+            Hapr visual
+          </motion.h1>
 
-            <motion.h1
-              variants={item}
-              className="mt-6 font-sans text-[clamp(3.5rem,9vw,8.5rem)] font-bold leading-[0.92] tracking-[-0.03em] text-ink"
-            >
-              Hapr visual
-            </motion.h1>
-
-            <motion.p
-              variants={item}
-              className="mt-4 font-serif text-[clamp(2rem,4.5vw,4rem)] italic leading-[1.05] text-ink"
-            >
-              Your vision, our renders
-            </motion.p>
-
-            <motion.div variants={item} className="mt-12">
-              <a href="#contact-form" className="pill text-base">
-                Discuss a project!
-              </a>
-            </motion.div>
-          </motion.div>
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.9, delay: 0.2, ease: "easeOut" }}
+            className="mt-3 font-serif text-[clamp(1.75rem,3.5vw,3rem)] italic leading-[1.1] text-white/95 sm:mt-4"
+          >
+            Your vision, our renders
+          </motion.p>
         </div>
-
-        <div className="h-[420px] sm:h-[520px] lg:col-span-5 lg:h-[620px]">
-          <Hero3D scroll={scroll} />
-        </div>
-      </motion.div>
+      </div>
     </section>
   );
 }

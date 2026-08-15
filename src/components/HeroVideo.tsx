@@ -13,7 +13,7 @@ export default function HeroVideo() {
         playsInline
         preload="auto"
       />
-      <div className="pointer-events-none absolute inset-0 select-none bg-cream/70" />
+      <div className="pointer-events-none absolute inset-0 select-none bg-black/15" />
     </div>
   );
 }

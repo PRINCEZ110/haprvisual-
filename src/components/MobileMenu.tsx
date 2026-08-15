@@ -2,8 +2,7 @@
 
 import { AnimatePresence, motion } from "framer-motion";
 import Logo from "@/components/Logo";
-import Clock from "@/components/Clock";
-import { IconBehance, IconClose, IconInstagram, IconLinkedIn } from "@/components/icons";
+import { IconClose } from "@/components/icons";
 import { CONTACT_COPY } from "@/lib/constants";
 
 const LINKS = [
@@ -64,21 +63,7 @@ export default function MobileMenu({
             animate={{ opacity: 1 }}
             transition={{ delay: 0.45 }}
           >
-            <div className="flex items-center gap-4 text-cream/80">
-              <a href="https://www.instagram.com/haprvisual/" target="_blank" rel="noreferrer" aria-label="Instagram">
-                <IconInstagram className="h-5 w-5" />
-              </a>
-              <a href="#" aria-label="LinkedIn">
-                <IconLinkedIn className="h-5 w-5" />
-              </a>
-              <a href="#" aria-label="Behance">
-                <IconBehance className="h-5 w-5" />
-              </a>
-            </div>
-            <div className="mt-6 flex items-center justify-between text-sm text-cream/60">
-              <Clock dark />
-              <span>{CONTACT_COPY.location}</span>
-            </div>
+            <div className="text-sm text-cream/60">{CONTACT_COPY.location}</div>
           </motion.div>
         </motion.div>
       )}
