@@ -48,15 +48,23 @@ export const DEFAULT_SERVICES = [
 ] as const;
 
 export const CONTACT_COPY = {
-  heading: "Let's collaborate!",
+  heading: "Let's work together",
   success: "Thank you! Your submission has been received!",
   error: "Oops! Something went wrong while submitting the form.",
   description:
     "Hapr is a 3D visualization studio merging expertise and artistic vision. We create visualizations that tell stories, evoke emotions, and add value.",
   email: "haprvisual@gmail.com",
-  location: "Kyiv, Ukraine",
-  rights: "HAPR® 2024. All rights reserved",
+  location: "Kathmandu, Nepal",
+  rights: "HAPR® 2026. All rights reserved",
 } as const;
+
+export const SERVICE_LABELS: Record<string, string> = {
+  "3D product rendering": "Product",
+  "Interior rendering": "Interior",
+  "Exterior rendering": "Architecture",
+  "3D modelling": "Modeling",
+  Animation: "Animation",
+};
 
 export const SERVICE_VIDEOS: Record<string, string> = {
   "3D product rendering": "/videos/product-render.mp4",

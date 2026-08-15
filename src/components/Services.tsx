@@ -5,7 +5,12 @@ import Image from "next/image";
 import { AnimatePresence, motion, useMotionValue } from "framer-motion";
 import AutoVideo from "@/components/AutoVideo";
 import { IconChevron } from "@/components/icons";
-import { SERVICE_PANEL_VIDEOS, SERVICE_THUMBNAILS, SERVICE_VIDEOS } from "@/lib/constants";
+import {
+  SERVICE_LABELS,
+  SERVICE_PANEL_VIDEOS,
+  SERVICE_THUMBNAILS,
+  SERVICE_VIDEOS,
+} from "@/lib/constants";
 import type { ServiceItem } from "@/lib/data";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
@@ -152,14 +157,22 @@ export default function Services({ services }: { services: ServiceItem[] }) {
                   >
                     {String(i + 1).padStart(2, "0")}
                   </span>
-                  <span
-                    className={`text-2xl font-medium transition-all duration-500 lg:text-4xl ${
-                      open
-                        ? "text-ink"
-                        : "text-ink group-hover:translate-x-2"
-                    }`}
-                  >
-                    {service.title}
+                  <span className="flex flex-col items-start gap-1 lg:flex-row lg:items-baseline lg:gap-6">
+                    <span
+                      className="text-[10px] uppercase tracking-[0.25em] text-muted"
+                      aria-hidden="true"
+                    >
+                      {SERVICE_LABELS[service.title] ?? ""}
+                    </span>
+                    <span
+                      className={`text-2xl font-medium transition-all duration-500 lg:text-4xl ${
+                        open
+                          ? "text-ink"
+                          : "text-ink group-hover:translate-x-2"
+                      }`}
+                    >
+                      {service.title}
+                    </span>
                   </span>
                 </div>
                 <motion.span

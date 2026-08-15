@@ -1,272 +1,121 @@
 "use client";
 
-import { useMemo } from "react";
-import { motion } from "framer-motion";
-import HoverVideo from "@/components/HoverVideo";
+import { useEffect, useMemo, useRef, useState } from "react";
+import Image from "next/image";
 import { PROJECT_VIDEOS } from "@/lib/videos";
-import type { ProjectItem } from "@/lib/data";
-
-type Block =
-  | { type: "featured"; item: ProjectItem; reverse?: boolean }
-  | { type: "row"; items: ProjectItem[] }
-  | { type: "fullwidth"; item: ProjectItem };
+import { slugify, type ProjectItem } from "@/lib/data";
 
 const INK = "#241D19";
 const MUTED = "#8F7770";
 const HAIRLINE = "border-[rgba(60,40,30,0.12)]";
-const RULE = "bg-[rgba(60,40,30,0.18)]";
-const FRAME =
-  "pointer-events-none absolute inset-0 outline outline-1 outline-offset-[-10px] outline-[rgba(60,40,30,0.16)]";
 
-const fadeUp = {
-  hidden: { opacity: 0, y: 24 },
-  show: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] as const },
-  },
-};
-
-function buildBlocks(list: ProjectItem[]): Block[] {
-  const blocks: Block[] = [];
-  let i = 0;
-  let phase = 0;
-  while (i < list.length) {
-    const rem = list.length - i;
-    if (phase === 0) {
-      blocks.push({ type: "featured", item: list[i] });
-      i++;
-    } else if (phase === 1) {
-      const take = Math.min(3, rem);
-      blocks.push({ type: "row", items: list.slice(i, i + take) });
-      i += take;
-    } else if (phase === 2) {
-      blocks.push({ type: "featured", item: list[i], reverse: true });
-      i++;
-    } else if (phase === 3) {
-      const take = Math.min(3, rem);
-      blocks.push({ type: "row", items: list.slice(i, i + take) });
-      i += take;
-    } else if (phase === 4) {
-      blocks.push({ type: "fullwidth", item: list[i] });
-      i++;
-    } else {
-      const take = Math.min(3, rem);
-      blocks.push({ type: "row", items: list.slice(i, i + take) });
-      i += take;
-    }
-    phase = (phase + 1) % 6;
-  }
-  return blocks;
-}
-
-function FeaturedProject({
+function FullscreenPlate({
   item,
   index,
-  reverse = false,
+  total,
 }: {
   item: ProjectItem;
   index: number;
-  reverse?: boolean;
+  total: number;
 }) {
-  return (
-    <motion.div variants={fadeUp}>
-      <div className="grid items-center gap-10 lg:grid-cols-12 lg:gap-16">
-        <a
-          href="#contact-form"
-          className={`group block lg:col-span-8 ${reverse ? "lg:order-2" : ""}`}
-        >
-          <div className="relative h-[420px] overflow-hidden sm:h-[520px] lg:h-[560px]">
-            <HoverVideo
-              src={PROJECT_VIDEOS[item.title]}
-              poster={item.coverImage}
-              alt={item.title}
-              sizes="(max-width: 1024px) 100vw, 67vw"
-            />
-            <div className={FRAME} />
-          </div>
-        </a>
+  const ref = useRef<HTMLDivElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [posterOnly, setPosterOnly] = useState(false);
+  const [failed, setFailed] = useState(false);
+  const category = item.categories[0]?.name ?? "Visualization";
+  const src = PROJECT_VIDEOS[item.title];
 
-        <div
-          className={`lg:col-span-4 ${
-            reverse ? "lg:order-1 lg:pr-8" : "lg:pl-8"
-          }`}
-        >
-          <div className="flex items-baseline gap-4">
-            <span
-              className="font-serif text-lg italic"
-              style={{ color: INK }}
-            >
-              {String(index).padStart(2, "0")}
-            </span>
-            <span
-              className="text-[11px] uppercase tracking-[0.2em]"
-              style={{ color: MUTED }}
-            >
-              {item.year}
-            </span>
-            <span
-              className="ml-auto text-[10px] uppercase tracking-[0.25em]"
-              style={{ color: MUTED }}
-            >
-              Featured
-            </span>
-          </div>
-          <h3
-            className="mt-5 font-serif text-4xl font-normal italic leading-[1.05] lg:text-5xl"
-            style={{ color: INK }}
-          >
+  useEffect(() => {
+    setPosterOnly(
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    );
+  }, []);
+
+  useEffect(() => {
+    const el = ref.current;
+    const video = videoRef.current;
+    if (!el || !video || !src || posterOnly) return;
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          video.play().catch(() => {});
+        } else {
+          video.pause();
+          video.currentTime = 0;
+        }
+      },
+      { threshold: 0.4 }
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [src, posterOnly]);
+
+  return (
+    <div
+      ref={ref}
+      className="relative h-full w-full overflow-hidden bg-espresso"
+    >
+      {src && !posterOnly && !failed ? (
+        <video
+          ref={videoRef}
+          src={src}
+          muted
+          loop
+          playsInline
+          webkit-playsinline=""
+          preload="auto"
+          poster={item.coverImage}
+          aria-hidden="true"
+          tabIndex={-1}
+          onEnded={(e) => {
+            const v = e.currentTarget;
+            v.currentTime = 0;
+            v.play().catch(() => {});
+          }}
+          onError={() => setFailed(true)}
+          className="absolute inset-0 h-full w-full object-cover"
+        />
+      ) : (
+        <Image
+          src={item.coverImage}
+          alt={item.title}
+          fill
+          priority={index === 0}
+          sizes="100vw"
+          className="object-cover"
+        />
+      )}
+
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-black/15 to-black/30" />
+      <div className="pointer-events-none absolute inset-0 outline outline-1 outline-offset-[-10px] outline-white/15" />
+
+      <p
+        className="pointer-events-none absolute right-5 top-5 font-serif text-sm italic text-white/70 lg:right-10 lg:top-8"
+        aria-hidden="true"
+      >
+        {String(index + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}
+      </p>
+
+      <a
+        href={`/projects/${slugify(item.title)}`}
+        className="group absolute inset-x-0 bottom-0 block"
+        aria-label={`${item.title} — view project`}
+      >
+        <div className="px-5 pb-8 pt-24 sm:px-10 lg:px-16 lg:pb-12">
+          <p className="text-[11px] uppercase tracking-[0.3em] text-white/70">
+            Project {String(index + 1).padStart(2, "0")} — {category}
+          </p>
+          <h3 className="mt-3 font-serif text-4xl font-normal italic leading-[1.02] text-white transition-opacity duration-300 group-hover:opacity-75 sm:text-5xl lg:text-7xl">
             {item.title}
           </h3>
-          <div className={`mt-7 h-px w-12 ${RULE}`} />
-          <p
-            className="mt-6 max-w-md text-[13px] leading-[1.7]"
-            style={{ color: MUTED }}
-          >
+          <p className="mt-4 max-w-md text-[13px] leading-[1.7] text-white/85 sm:text-sm lg:mt-5">
             {item.description}
           </p>
-          {item.categories[0] && (
-            <p
-              className="mt-8 text-[11px] uppercase tracking-[0.2em]"
-              style={{ color: INK }}
-            >
-              {item.categories[0].name}
-            </p>
-          )}
-        </div>
-      </div>
-    </motion.div>
-  );
-}
-
-function FullwidthProject({
-  item,
-  index,
-}: {
-  item: ProjectItem;
-  index: number;
-}) {
-  return (
-    <motion.div variants={fadeUp}>
-      <a href="#contact-form" className="group block">
-        <div className="relative aspect-[21/10] overflow-hidden">
-          <HoverVideo
-            src={PROJECT_VIDEOS[item.title]}
-            poster={item.coverImage}
-            alt={item.title}
-            sizes="100vw"
-          />
-          <div className={FRAME} />
+          <p className="mt-5 text-[11px] uppercase tracking-[0.25em] text-white/60">
+            {item.year} · View project →
+          </p>
         </div>
       </a>
-      <div className="mt-8 grid items-end gap-6 lg:grid-cols-12">
-        <div className="flex items-baseline gap-4 lg:col-span-2">
-          <span className="font-serif text-lg italic" style={{ color: INK }}>
-            {String(index).padStart(2, "0")}
-          </span>
-          <span
-            className="text-[11px] uppercase tracking-[0.2em]"
-            style={{ color: MUTED }}
-          >
-            {item.year}
-          </span>
-        </div>
-        <div className="lg:col-span-7">
-          <h3
-            className="font-serif text-3xl font-normal italic leading-[1.1] lg:text-5xl"
-            style={{ color: INK }}
-          >
-            {item.title}
-          </h3>
-          <p
-            className="mt-3 max-w-xl text-[13px] leading-[1.65]"
-            style={{ color: MUTED }}
-          >
-            {item.description}
-          </p>
-        </div>
-        {item.categories[0] && (
-          <p
-            className="text-[11px] uppercase tracking-[0.2em] lg:col-span-3 lg:text-right"
-            style={{ color: INK }}
-          >
-            {item.categories[0].name}
-          </p>
-        )}
-      </div>
-    </motion.div>
-  );
-}
-
-function RowBlock({
-  items,
-  startIndex,
-}: {
-  items: ProjectItem[];
-  startIndex: number;
-}) {
-  return (
-    <div className="grid gap-12 sm:grid-cols-2 lg:grid-cols-3 lg:gap-10">
-      {items.map((item, i) => (
-        <motion.a
-          key={item.id}
-          href="#contact-form"
-          variants={{
-            hidden: { opacity: 0, y: 24 },
-            show: {
-              opacity: 1,
-              y: 0,
-              transition: {
-                duration: 0.7,
-                ease: [0.22, 1, 0.36, 1],
-                delay: i * 0.08,
-              },
-            },
-          }}
-          className="group block"
-        >
-          <div className="relative aspect-[3/4] overflow-hidden">
-            <HoverVideo
-              src={PROJECT_VIDEOS[item.title]}
-              poster={item.coverImage}
-              alt={item.title}
-              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-            />
-            <div className={FRAME} />
-          </div>
-          <div className="mt-6 flex items-baseline justify-between gap-4">
-            <span className="font-serif text-sm italic" style={{ color: INK }}>
-              {String(startIndex + i + 1).padStart(2, "0")}
-            </span>
-            <span
-              className="text-[10px] uppercase tracking-[0.2em]"
-              style={{ color: MUTED }}
-            >
-              {item.year}
-            </span>
-          </div>
-          <h3
-            className="mt-2 font-serif text-2xl font-normal italic leading-tight transition-transform duration-500 group-hover:translate-x-1"
-            style={{ color: INK }}
-          >
-            {item.title}
-          </h3>
-          {item.categories[0] && (
-            <p
-              className="mt-2 text-[11px] uppercase tracking-[0.2em]"
-              style={{ color: MUTED }}
-            >
-              {item.categories[0].name}
-            </p>
-          )}
-          <p
-            className="mt-3 line-clamp-2 text-[13px] leading-[1.6]"
-            style={{ color: MUTED }}
-          >
-            {item.description}
-          </p>
-        </motion.a>
-      ))}
     </div>
   );
 }
@@ -282,113 +131,87 @@ export default function Projects({
     return [hero, ...projects.filter((p) => p.id !== hero.id)];
   }, [projects]);
 
-  const blocks = useMemo(() => buildBlocks(ordered), [ordered]);
-
-  const indexedBlocks = useMemo(() => {
-    let acc = 0;
-    return blocks.map((block) => {
-      const blockIndex = acc;
-      acc += block.type === "row" ? block.items.length : 1;
-      return { block, blockIndex };
-    });
-  }, [blocks]);
-
   return (
     <section id="projects" className="bg-blush">
       <div className="container-hapr py-20 lg:py-28">
-        <div className="mb-12 lg:mb-20">
-          <div className="flex items-end justify-between gap-6">
-            <div>
-              <p
-                className="text-[11px] uppercase tracking-[0.25em]"
-                style={{ color: MUTED }}
-              >
-                Selected Work
-              </p>
-              <h2
-                className="mt-3 font-serif text-5xl font-normal italic lg:text-6xl"
-                style={{ color: INK }}
-              >
-                Projects
-              </h2>
-            </div>
-            <div className="flex items-baseline gap-2 lg:flex-col lg:items-end lg:gap-1">
-              <span
-                className="font-serif text-4xl italic lg:text-5xl"
-                style={{ color: INK }}
-              >
-                {String(projects.length).padStart(2, "0")}
-              </span>
-              <span
-                className="text-[10px] uppercase tracking-[0.25em]"
-                style={{ color: MUTED }}
-              >
-                Projects
-              </span>
-            </div>
+        <div className="flex items-end justify-between gap-6">
+          <div>
+            <p
+              className="text-[11px] uppercase tracking-[0.25em]"
+              style={{ color: MUTED }}
+            >
+              Selected Work
+            </p>
+            <h2
+              className="mt-3 font-serif text-5xl font-normal italic lg:text-6xl"
+              style={{ color: INK }}
+            >
+              Projects
+            </h2>
           </div>
-          <p
-            className="mt-6 max-w-md text-[13px] leading-[1.7]"
-            style={{ color: MUTED }}
-          >
-            An ongoing body of interiors, facades and objects — composed with
-            restraint, finished in detail. Hover each space to watch it move.
-          </p>
-          <div className={`mt-12 ${HAIRLINE}`} />
+          <div className="flex items-baseline gap-2 lg:flex-col lg:items-end lg:gap-1">
+            <span
+              className="font-serif text-4xl italic lg:text-5xl"
+              style={{ color: INK }}
+            >
+              {String(projects.length).padStart(2, "0")}
+            </span>
+            <span
+              className="text-[10px] uppercase tracking-[0.25em]"
+              style={{ color: MUTED }}
+            >
+              Projects
+            </span>
+          </div>
         </div>
-
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5 }}
+        <p
+          className="mt-6 max-w-md text-[13px] leading-[1.7]"
+          style={{ color: MUTED }}
         >
-          <motion.div
-            initial="hidden"
-            whileInView="show"
-            viewport={{ once: true, margin: "-60px" }}
-            className="flex flex-col"
-          >
-            {indexedBlocks.map(({ block, blockIndex }, i) => (
-              <div
-                key={`${i}-${block.type}`}
-                className={`${i === 0 ? "" : `mt-20 border-t pt-14 lg:mt-24 lg:pt-16 ${HAIRLINE}`}`}
-              >
-                {block.type === "featured" ? (
-                  <FeaturedProject
-                    item={block.item}
-                    index={blockIndex + 1}
-                    reverse={block.reverse}
-                  />
-                ) : block.type === "fullwidth" ? (
-                  <FullwidthProject item={block.item} index={blockIndex + 1} />
-                ) : (
-                  <RowBlock items={block.items} startIndex={blockIndex} />
-                )}
-              </div>
-            ))}
-          </motion.div>
-        </motion.div>
+          An ongoing body of interiors, facades and objects — composed with
+          restraint, finished in detail. Scroll — each space holds the screen.
+        </p>
+        <div className={`mt-12 ${HAIRLINE}`} />
+      </div>
 
-        {projects.length === 0 && (
-          <p className="py-16 text-center text-sm" style={{ color: MUTED }}>
-            No projects in this category yet — check back soon.
-          </p>
-        )}
+      {ordered.length === 0 && (
+        <p className="pb-16 text-center text-sm" style={{ color: MUTED }}>
+          No projects yet — check back soon.
+        </p>
+      )}
 
-        <div className={`mt-24 border-t pt-16 text-center ${HAIRLINE}`}>
+      {ordered.map((item, i) => (
+        <div key={item.id} className="sticky top-0 h-[100svh]">
+          <FullscreenPlate
+            item={item}
+            index={i}
+            total={ordered.length}
+          />
+        </div>
+      ))}
+
+      <div className="bg-blush">
+        <div className="container-hapr py-24 text-center lg:py-32">
           <p
             className="text-[11px] uppercase tracking-[0.25em]"
             style={{ color: MUTED }}
           >
-            Have a space in mind?
+            Have something in mind?
           </p>
           <p
-            className="mt-4 font-serif text-3xl font-normal italic lg:text-4xl"
+            className="mx-auto mt-6 max-w-3xl font-serif text-4xl font-normal italic leading-[1.1] lg:text-6xl"
             style={{ color: INK }}
           >
-            Let&apos;s shape it together.
+            Let&apos;s make it visual.
           </p>
-          <a href="#contact-form" className="pill mt-9">
+          <p
+            className="mx-auto mt-5 max-w-md text-[13px] leading-[1.7]"
+            style={{ color: MUTED }}
+          >
+            Every project starts with a conversation. Tell us about the space,
+            the product or the idea — we&apos;ll bring it to life.
+          </p>
+          <a href="#contact-form" className="pill mt-10">
             Start a project
           </a>
         </div>

@@ -233,7 +233,7 @@ export default function AboutPage() {
         <div className="container-hapr flex flex-col items-start gap-8 py-24 lg:flex-row lg:items-center lg:justify-between lg:py-32">
           <Reveal>
             <h2 className="font-serif text-5xl italic lg:text-6xl">
-              Let&apos;s collaborate!
+              Let&apos;s work together
             </h2>
           </Reveal>
           <Reveal delay={0.1}>

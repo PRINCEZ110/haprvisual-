@@ -57,7 +57,7 @@ export default function Contact() {
           <form onSubmit={handleSubmit} className="mt-12 grid gap-6 md:grid-cols-2">
             <div>
               <label htmlFor="service" className="field-label">
-                Services
+                What do you need?
               </label>
               <div className="relative">
                 <select
@@ -86,7 +86,7 @@ export default function Contact() {
 
             <div>
               <label htmlFor="budget" className="field-label">
-                Budget in USD
+                What&apos;s your budget?
               </label>
               <div className="relative">
                 <select
@@ -115,7 +115,7 @@ export default function Contact() {
 
             <div>
               <label htmlFor="name" className="field-label">
-                Name
+                Your name
               </label>
               <input
                 id="name"
@@ -131,7 +131,7 @@ export default function Contact() {
 
             <div>
               <label htmlFor="email" className="field-label">
-                Email
+                Your email
               </label>
               <input
                 id="email"
@@ -147,7 +147,7 @@ export default function Contact() {
 
             <div className="md:col-span-2">
               <label htmlFor="message" className="field-label">
-                Project description (Optional)
+                Tell us about the project...
               </label>
               <textarea
                 id="message"
@@ -165,7 +165,7 @@ export default function Contact() {
                 disabled={status === "loading"}
                 className="pill w-fit disabled:cursor-not-allowed disabled:opacity-60"
               >
-                {status === "loading" ? "Sending..." : "Submit"}
+                {status === "loading" ? "Sending..." : "Send inquiry →"}
               </button>
 
               <motion.div

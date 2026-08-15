@@ -52,6 +52,18 @@ export async function getServices(): Promise<ServiceItem[]> {
   }
 }
 
+export function slugify(title: string): string {
+  return title
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "");
+}
+
+export async function getProjectBySlug(slug: string) {
+  const projects = await getProjects();
+  return projects.find((p) => slugify(p.title) === slug) ?? null;
+}
+
 export async function upsertCategories(names: string[]) {
   return Promise.all(
     names.map((name) =>

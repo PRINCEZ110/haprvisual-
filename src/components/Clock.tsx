@@ -7,7 +7,7 @@ export default function Clock({ dark = false }: { dark?: boolean }) {
 
   useEffect(() => {
     const fmt = new Intl.DateTimeFormat("en-GB", {
-      timeZone: "Europe/Kyiv",
+      timeZone: "Asia/Kathmandu",
       hour: "2-digit",
       minute: "2-digit",
       hour12: false,
@@ -23,7 +23,7 @@ export default function Clock({ dark = false }: { dark?: boolean }) {
       className={`tabular-nums text-sm ${
         dark ? "text-cream/60" : "text-muted"
       }`}
-      title="Kyiv time (Europe/Kyiv)"
+      title="Kathmandu time (Asia/Kathmandu)"
     >
       {time || "--:--"}
     </span>

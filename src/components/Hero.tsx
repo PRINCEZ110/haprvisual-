@@ -11,7 +11,7 @@ export default function Hero() {
     >
       <HeroVideo />
 
-      <div className="absolute inset-0 z-10 flex -translate-y-[18%] items-center justify-center px-5 text-center">
+      <div className="absolute inset-0 z-10 flex -translate-y-[12%] items-center justify-center px-5 text-center">
         <div>
           <motion.p
             initial={{ opacity: 0, y: 10 }}
@@ -26,7 +26,7 @@ export default function Hero() {
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
-            className="mt-4 font-serif text-[clamp(2.75rem,5vw,4.5rem)] font-normal leading-[1.05] tracking-[-0.01em] text-white"
+            className="mt-5 font-serif text-[clamp(3rem,6vw,5.5rem)] font-normal leading-[1.02] tracking-[-0.01em] text-white"
           >
             HAPR Visual
           </motion.h1>
@@ -34,10 +34,19 @@ export default function Hero() {
           <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.9, delay: 0.2, ease: "easeOut" }}
-            className="mt-3 font-serif text-[clamp(1.75rem,3.5vw,3rem)] italic leading-[1.1] text-white/95 sm:mt-4"
+            transition={{ duration: 0.9, delay: 0.25, ease: "easeOut" }}
+            className="mt-4 font-serif text-[clamp(1.5rem,3vw,2.25rem)] italic leading-[1.15] text-white/95 sm:mt-5"
           >
-            Your vision, our renders
+            We turn architecture into atmosphere.
+          </motion.p>
+
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.9, delay: 0.4, ease: "easeOut" }}
+            className="mt-6 text-[10px] uppercase tracking-[0.25em] text-white/70 sm:mt-7"
+          >
+            3D Visualization — Architectural Imagery — Product Films
           </motion.p>
         </div>
       </div>

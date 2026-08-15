@@ -78,7 +78,21 @@ export default function MobileMenu({
             animate={{ opacity: 1 }}
             transition={{ delay: 0.45 }}
           >
-            <div className="text-sm text-cream/60">{CONTACT_COPY.location}</div>
+            <div className="flex flex-wrap items-center gap-x-8 gap-y-3">
+              <a
+                href="https://www.instagram.com/haprvisual/"
+                target="_blank"
+                rel="noreferrer"
+                className="text-sm text-cream/70 transition-colors hover:text-cream"
+              >
+                Instagram
+              </a>
+              <span className="text-sm text-cream/50">LinkedIn</span>
+              <span className="text-sm text-cream/50">Behance</span>
+            </div>
+            <div className="mt-4 text-sm text-cream/60">
+              {CONTACT_COPY.location}
+            </div>
           </motion.div>
         </motion.div>
       )}
