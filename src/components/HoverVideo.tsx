@@ -1,6 +1,7 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useInView } from "framer-motion";
 import Image from "next/image";
 
 type Props = {
@@ -11,35 +12,21 @@ type Props = {
 };
 
 export default function HoverVideo({ src, poster, alt, sizes }: Props) {
+  const containerRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [hovered, setHovered] = useState(false);
+  const inView = useInView(containerRef, { margin: "200px" });
+  const [show, setShow] = useState(false);
   const [failed, setFailed] = useState(false);
-  const [frame, setFrame] = useState<string | null>(null);
   const retried = useRef(false);
 
-  const captureFrame = () => {
-    const video = videoRef.current;
-    if (!video || !video.videoWidth) return;
-    try {
-      const canvas = document.createElement("canvas");
-      const scale = Math.min(1, 1024 / video.videoWidth);
-      canvas.width = Math.round(video.videoWidth * scale);
-      canvas.height = Math.round(video.videoHeight * scale);
-      canvas
-        .getContext("2d")
-        ?.drawImage(video, 0, 0, canvas.width, canvas.height);
-      setFrame(canvas.toDataURL("image/jpeg", 0.8));
-    } catch {
-      // tainted canvas (no CORS on the video host) — keep the fallback image
-    }
-  };
-
-  const shownPoster = frame ?? poster;
+  useEffect(() => {
+    if (inView) setShow(true);
+  }, [inView]);
 
   if (!src || failed) {
     return (
       <Image
-        src={shownPoster}
+        src={poster}
         alt={alt}
         fill
         sizes={sizes}
@@ -50,40 +37,31 @@ export default function HoverVideo({ src, poster, alt, sizes }: Props) {
 
   return (
     <div
+      ref={containerRef}
       className="absolute inset-0 overflow-hidden"
       onMouseEnter={() => {
-        setHovered(true);
         videoRef.current?.play().catch(() => {});
       }}
       onMouseLeave={() => {
-        setHovered(false);
         const video = videoRef.current;
-        video?.pause();
-        captureFrame();
+        if (video) {
+          video.pause();
+          video.currentTime = 0;
+        }
       }}
     >
-      <Image
-        src={shownPoster}
-        alt={alt}
-        fill
-        sizes={sizes}
-        className={`pointer-events-none object-cover transition-opacity duration-500 ${
-          hovered ? "opacity-0" : "opacity-100"
-        }`}
-      />
       <video
         ref={videoRef}
-        src={src}
         muted
         loop
         playsInline
-        preload="none"
+        preload="auto"
         crossOrigin="anonymous"
         controls={false}
         controlsList="nodownload noremoteplayback noplaybackrate"
         disablePictureInPicture
         draggable={false}
-        onLoadedData={captureFrame}
+        src={show ? src : undefined}
         onError={() => {
           if (!retried.current) {
             retried.current = true;
@@ -96,9 +74,7 @@ export default function HoverVideo({ src, poster, alt, sizes }: Props) {
             setFailed(true);
           }
         }}
-        className={`pointer-events-none absolute inset-0 h-full w-full select-none object-cover transition-opacity duration-500 ${
-          hovered ? "opacity-100" : "opacity-0"
-        }`}
+        className="pointer-events-none absolute inset-0 h-full w-full select-none object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
       />
     </div>
   );
