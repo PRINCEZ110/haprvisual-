@@ -49,18 +49,22 @@ function ReelPanel({
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          video.play().catch(() => undefined);
-        } else {
-          video.pause();
-        }
-      },
-      { threshold: 0.2 }
-    );
-    observer.observe(video);
-    return () => observer.disconnect();
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    const tryPlay = () => {
+      const promise = video.play();
+      if (promise) {
+        promise.catch(() => {
+          timer = setTimeout(tryPlay, 500);
+        });
+      }
+    };
+    const onCanPlay = () => tryPlay();
+    video.addEventListener("canplay", onCanPlay);
+    tryPlay();
+    return () => {
+      video.removeEventListener("canplay", onCanPlay);
+      if (timer) clearTimeout(timer);
+    };
   }, []);
 
   return (
@@ -71,9 +75,8 @@ function ReelPanel({
       <motion.div
         className="absolute inset-0"
         initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true, amount: 0.2 }}
-        transition={{ duration: 1.2, ease: EASE }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.8, ease: EASE }}
       >
         <video
           ref={videoRef}
@@ -82,7 +85,7 @@ function ReelPanel({
           muted
           loop
           playsInline
-          preload="metadata"
+          preload="auto"
           aria-hidden="true"
           tabIndex={-1}
           className="h-full w-full object-cover brightness-[1.08] transition-[transform,filter,opacity] duration-[600ms] ease-[cubic-bezier(0.22,0.61,0.36,1)] group-hover/reels:opacity-75 group-hover/reels:group-hover/panel:scale-[1.12] group-hover/reels:group-hover/panel:opacity-100 group-hover/reels:group-hover/panel:brightness-105"
@@ -110,9 +113,8 @@ function SeamLine({
 }) {
   const motionProps = {
     initial: { opacity: 0, [vertical ? "scaleY" : "scaleX"]: 0.5 } as const,
-    whileInView: { opacity: 1, [vertical ? "scaleY" : "scaleX"]: 1 } as const,
-    viewport: { once: true, amount: 0.2 } as const,
-    transition: { duration: 1.2, ease: EASE, delay } as const,
+    animate: { opacity: 1, [vertical ? "scaleY" : "scaleX"]: 1 } as const,
+    transition: { duration: 1, ease: EASE, delay } as const,
   };
   return (
     <motion.div
@@ -212,15 +214,6 @@ export default function ShowReels() {
 
       <SectionTitle left="Show Reels" right="01 — 09" />
       <SectionTitle left="Show Reels" right="01 — 09" mobile />
-
-      <motion.div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 z-20 bg-black"
-        initial={{ opacity: 0.2 }}
-        whileInView={{ opacity: 0 }}
-        viewport={{ once: true, amount: 0.2 }}
-        transition={{ duration: 1, ease: "easeOut" }}
-      />
     </section>
   );
 }
