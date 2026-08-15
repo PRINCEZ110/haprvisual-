@@ -60,20 +60,32 @@ export const CONTACT_COPY = {
 
 export const SERVICE_VIDEOS: Record<string, string> = {
   "3D product rendering": "/videos/product-render.mp4",
-  "Interior rendering":
-    "https://videos.pexels.com/video-files/29466038/12684293_1920_1080_60fps.mp4",
-  "Exterior rendering":
-    "https://videos.pexels.com/video-files/17224760/17224760-hd_1920_1080_30fps.mp4",
-  "3D modelling":
-    "https://videos.pexels.com/video-files/29466021/12684208_1920_1080_60fps.mp4",
-  Animation:
-    "https://videos.pexels.com/video-files/18531414/18531414-hd_1920_1080_60fps.mp4",
+  "Interior rendering": "/videos/service-interior-render.mp4",
+  "Exterior rendering": "/videos/service-exterior-render.mp4",
+  "3D modelling": "/videos/service-modeling-render.mp4",
+  Animation: "/videos/service-animation-render.mp4",
 };
 
 export const SERVICE_PANEL_VIDEOS: Record<string, string[]> = {
   "3D product rendering": [
     "/videos/service-product-panel-1.mp4",
     "/videos/service-product-panel-2.mp4",
+  ],
+  "Interior rendering": [
+    "/videos/service-interior-panel-1.mp4",
+    "/videos/service-interior-panel-2.mp4",
+  ],
+  "Exterior rendering": [
+    "/videos/service-exterior-panel-1.mp4",
+    "/videos/service-exterior-panel-2.mp4",
+  ],
+  "3D modelling": [
+    "/videos/service-modeling-panel-1.mp4",
+    "/videos/service-modeling-panel-2.mp4",
+  ],
+  Animation: [
+    "/videos/service-animation-panel-1.mp4",
+    "/videos/service-animation-panel-2.mp4",
   ],
 };
 
