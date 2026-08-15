@@ -11,6 +11,8 @@ const REELS = [
   { id: 5, title: "Reel 05", video: "/videos/reel-05.mp4" },
   { id: 6, title: "Reel 06", video: "/videos/reel-06.mp4" },
   { id: 7, title: "Reel 07", video: "/videos/reel-07.mp4" },
+  { id: 8, title: "Reel 08", video: "/videos/reel-08.mp4" },
+  { id: 9, title: "Reel 09", video: "/videos/reel-09.mp4" },
 ];
 
 const SLASH = 2.2;
@@ -21,26 +23,26 @@ const CLIP_MID = `polygon(calc(33.333% - ${SLASH}%) 0, calc(66.667% - ${SLASH}%)
 const CLIP_RIGHT = `polygon(calc(66.667% - ${SLASH}%) 0, 100% 0, 100% 100%, calc(66.667% + ${SLASH}%) 100%)`;
 const CLIP_FULL = "polygon(0 0, 100% 0, 100% 100%, 0 100%)";
 
-const GRID: { reel: number; clip: string; span?: boolean }[] = [
+const GRID: { reel: number; clip: string }[] = [
   { reel: 5, clip: CLIP_LEFT },
   { reel: 6, clip: CLIP_MID },
   { reel: 4, clip: CLIP_RIGHT },
   { reel: 0, clip: CLIP_LEFT },
   { reel: 1, clip: CLIP_MID },
   { reel: 2, clip: CLIP_RIGHT },
-  { reel: 3, clip: CLIP_FULL, span: true },
+  { reel: 3, clip: CLIP_LEFT },
+  { reel: 7, clip: CLIP_MID },
+  { reel: 8, clip: CLIP_RIGHT },
 ];
 
 function ReelPanel({
   reel,
   index,
   clip,
-  span = false,
 }: {
   reel: (typeof REELS)[number];
   index: number;
   clip: string;
-  span?: boolean;
 }) {
   const videoRef = useRef<HTMLVideoElement>(null);
 
@@ -63,9 +65,7 @@ function ReelPanel({
 
   return (
     <div
-      className={`group/panel relative h-full overflow-hidden ${
-        span ? "lg:col-span-3" : ""
-      }`}
+      className="group/panel relative h-full overflow-hidden"
       style={{ clipPath: clip }}
     >
       <motion.div
@@ -179,18 +179,17 @@ export default function ShowReels() {
       className="group/reels relative h-[100svh] overflow-hidden bg-black"
     >
       <div className="absolute inset-0 hidden grid-cols-3 grid-rows-3 lg:grid">
-        {GRID.map((cell, i) => (
+        {GRID.map((cell) => (
           <ReelPanel
             key={cell.reel}
             reel={REELS[cell.reel]}
             index={cell.reel}
             clip={cell.clip}
-            span={cell.span}
           />
         ))}
       </div>
 
-      <div className="flex h-[700svh] flex-col lg:hidden">
+      <div className="flex h-[900svh] flex-col lg:hidden">
         {REELS.map((reel, i) => (
           <div key={reel.id} className="relative h-[100svh] overflow-hidden">
             {i > 0 && (
@@ -211,8 +210,8 @@ export default function ShowReels() {
       <SeamLine vertical={false} at="33.333%" />
       <SeamLine vertical={false} at="66.667%" />
 
-      <SectionTitle left="Show Reels" right="01 — 07" />
-      <SectionTitle left="Show Reels" right="01 — 07" mobile />
+      <SectionTitle left="Show Reels" right="01 — 09" />
+      <SectionTitle left="Show Reels" right="01 — 09" mobile />
 
       <motion.div
         aria-hidden="true"
