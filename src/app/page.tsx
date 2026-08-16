@@ -1,6 +1,5 @@
 import Hero from "@/components/Hero";
 import Projects from "@/components/Projects";
-import Studio from "@/components/Studio";
 import Services from "@/components/Services";
 import ShowReels from "@/components/ShowReels";
 import Contact from "@/components/Contact";
@@ -15,7 +14,6 @@ export default async function HomePage() {
     <>
       <Hero />
       <Projects projects={projects} />
-      <Studio />
       <Services services={services} />
       <ShowReels />
       <Contact />

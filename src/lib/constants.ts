@@ -94,11 +94,11 @@ export const CONTACT_COPY = {
 } as const;
 
 export const SERVICE_PREVIEWS: Record<ServiceOption, string> = {
-  Architecture: "/videos/service-exterior-render.mp4",
-  Interior: "/videos/service-interior-render.mp4",
-  Product: "/videos/service-product-panel-1.mp4",
-  "3D Modeling": "/videos/service-modeling-render.mp4",
-  Animation: "/videos/service-animation-render.mp4",
+  Architecture: "/videos/contact-architecture.mp4",
+  Interior: "/videos/contact-interior.mp4",
+  Product: "/videos/contact-product.mp4",
+  "3D Modeling": "/videos/contact-modeling.mp4",
+  Animation: "/videos/contact-animation.mp4",
 };
 
 export const SERVICE_LABELS: Record<string, string> = {

@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { AnimatePresence, motion, useMotionValue } from "framer-motion";
 import AutoVideo from "@/components/AutoVideo";
 import { IconChevron } from "@/components/icons";
@@ -122,6 +123,24 @@ export default function Services({ services }: { services: ServiceItem[] }) {
             </motion.span>
           </span>
         </h2>
+
+        <p className="mx-auto mt-8 max-w-4xl font-serif text-3xl italic leading-[1.2] text-ink lg:text-5xl">
+          We create visual worlds for architects, designers and brands — where
+          light, material and proportion tell the story before the building
+          exists.
+        </p>
+
+        <div className="mt-8 flex flex-wrap items-center justify-center gap-x-8 gap-y-4">
+          <Link
+            href="/about"
+            className="text-[11px] uppercase tracking-[0.25em] text-ink transition-colors hover:text-ink/60"
+          >
+            About the studio →
+          </Link>
+          <span className="text-[11px] uppercase tracking-[0.25em] text-muted">
+            3D Visualization · Architecture · Interiors · Products · Motion
+          </span>
+        </div>
       </div>
 
       <div className="border-t border-line">
