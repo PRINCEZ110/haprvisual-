@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { getSession } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 
-type Params = { params: { id: string } };
+type Params = { params: Promise<{ id: string }> };
 
 export async function PATCH(req: Request, { params }: Params) {
   const session = await getSession();
@@ -10,8 +10,9 @@ export async function PATCH(req: Request, { params }: Params) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
+  const { id } = await params;
   const existing = await prisma.contactSubmission.findUnique({
-    where: { id: params.id },
+    where: { id },
   });
   if (!existing) {
     return NextResponse.json({ error: "Not found" }, { status: 404 });
@@ -19,7 +20,7 @@ export async function PATCH(req: Request, { params }: Params) {
 
   const body = (await req.json().catch(() => ({}))) as { read?: boolean };
   const submission = await prisma.contactSubmission.update({
-    where: { id: params.id },
+    where: { id },
     data: { read: typeof body.read === "boolean" ? body.read : !existing.read },
   });
   return NextResponse.json(submission);
@@ -31,13 +32,14 @@ export async function DELETE(_req: Request, { params }: Params) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
+  const { id } = await params;
   const existing = await prisma.contactSubmission.findUnique({
-    where: { id: params.id },
+    where: { id },
   });
   if (!existing) {
     return NextResponse.json({ error: "Not found" }, { status: 404 });
   }
 
-  await prisma.contactSubmission.delete({ where: { id: params.id } });
+  await prisma.contactSubmission.delete({ where: { id } });
   return NextResponse.json({ ok: true });
 }

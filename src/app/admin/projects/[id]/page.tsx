@@ -7,13 +7,14 @@ import AdminProjectForm from "@/components/admin/AdminProjectForm";
 export default async function AdminEditProject({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
   const session = await getSession();
   if (!session) redirect("/admin/login");
 
+  const { id } = await params;
   const project = await prisma.project.findUnique({
-    where: { id: params.id },
+    where: { id },
     include: { categories: { select: { name: true } }, images: { select: { url: true } } },
   });
   if (!project) notFound();

@@ -4,7 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { projectSchema } from "@/lib/validation";
 import { upsertCategories } from "@/lib/data";
 
-type Params = { params: { id: string } };
+type Params = { params: Promise<{ id: string }> };
 
 export async function GET(_req: Request, { params }: Params) {
   const session = await getSession();
@@ -12,8 +12,9 @@ export async function GET(_req: Request, { params }: Params) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
+  const { id } = await params;
   const project = await prisma.project.findUnique({
-    where: { id: params.id },
+    where: { id },
     include: {
       categories: { select: { name: true } },
       images: { select: { url: true } },
@@ -49,7 +50,8 @@ export async function PUT(req: Request, { params }: Params) {
   const { title, year, description, coverImage, categories, gallery } =
     parsed.data;
 
-  const existing = await prisma.project.findUnique({ where: { id: params.id } });
+  const { id } = await params;
+  const existing = await prisma.project.findUnique({ where: { id } });
   if (!existing) {
     return NextResponse.json({ error: "Not found" }, { status: 404 });
   }
@@ -57,7 +59,7 @@ export async function PUT(req: Request, { params }: Params) {
   const categoriesWithIds = await upsertCategories(categories);
 
   const project = await prisma.project.update({
-    where: { id: params.id },
+    where: { id },
     data: {
       title,
       year,
@@ -84,11 +86,12 @@ export async function DELETE(_req: Request, { params }: Params) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const existing = await prisma.project.findUnique({ where: { id: params.id } });
+  const { id } = await params;
+  const existing = await prisma.project.findUnique({ where: { id } });
   if (!existing) {
     return NextResponse.json({ error: "Not found" }, { status: 404 });
   }
 
-  await prisma.project.delete({ where: { id: params.id } });
+  await prisma.project.delete({ where: { id } });
   return NextResponse.json({ ok: true });
 }

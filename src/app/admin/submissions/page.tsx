@@ -6,12 +6,12 @@ import SubmissionsAdmin from "@/components/admin/SubmissionsAdmin";
 export default async function AdminSubmissions({
   searchParams,
 }: {
-  searchParams: { filter?: string };
+  searchParams: Promise<{ filter?: string }>;
 }) {
   const session = await getSession();
   if (!session) redirect("/admin/login");
 
-  const filter = searchParams.filter;
+  const { filter } = await searchParams;
   const where = filter === "read" || filter === "unread" ? { read: filter === "read" } : undefined;
 
   const submissions = await prisma.contactSubmission.findMany({

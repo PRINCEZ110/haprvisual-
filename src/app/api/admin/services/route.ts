@@ -34,14 +34,16 @@ export async function PUT(req: Request) {
     return NextResponse.json({ error: "Invalid services data." }, { status: 400 });
   }
 
-  for (const s of parsed.data.services) {
-    const existing = await prisma.service.findUnique({ where: { id: s.id } });
-    if (!existing) continue;
-    await prisma.service.update({
-      where: { id: s.id },
-      data: { title: s.title, description: s.description },
-    });
-  }
+  await Promise.all(
+    parsed.data.services.map(async (s) => {
+      const existing = await prisma.service.findUnique({ where: { id: s.id } });
+      if (!existing) return;
+      await prisma.service.update({
+        where: { id: s.id },
+        data: { title: s.title, description: s.description },
+      });
+    })
+  );
 
   return NextResponse.json({ ok: true });
 }

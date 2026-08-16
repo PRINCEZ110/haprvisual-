@@ -9,10 +9,11 @@ const MUTED = "#8F7770";
 
 export const revalidate = 60;
 
-type Params = { params: { slug: string } };
+type Params = { params: Promise<{ slug: string }> };
 
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
-  const project = await getProjectBySlug(params.slug);
+  const { slug } = await params;
+  const project = await getProjectBySlug(slug);
   if (!project) return {};
   return {
     title: `${project.title} — HAPR Visual`,
@@ -21,8 +22,9 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
 }
 
 export default async function ProjectPage({ params }: Params) {
+  const { slug } = await params;
   const [project, all] = await Promise.all([
-    getProjectBySlug(params.slug),
+    getProjectBySlug(slug),
     getProjects(),
   ]);
   if (!project) notFound();

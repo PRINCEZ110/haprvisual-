@@ -142,44 +142,50 @@ const PROJECTS = [
 ];
 
 async function main() {
-  for (const name of CATEGORIES) {
-    await prisma.category.upsert({
-      where: { name },
-      update: {},
-      create: { name },
-    });
-  }
+  await Promise.all(
+    CATEGORIES.map((name) =>
+      prisma.category.upsert({
+        where: { name },
+        update: {},
+        create: { name },
+      })
+    )
+  );
 
   const count = await prisma.project.count();
   if (count === 0) {
-    for (const p of PROJECTS) {
-      await prisma.project.create({
-        data: {
-          title: p.title,
-          year: p.year,
-          description: p.description,
-          coverImage: p.image,
-          categories: {
-            connect: p.cats.map((name) => ({ name })),
+    await Promise.all(
+      PROJECTS.map((p) =>
+        prisma.project.create({
+          data: {
+            title: p.title,
+            year: p.year,
+            description: p.description,
+            coverImage: p.image,
+            categories: {
+              connect: p.cats.map((name) => ({ name })),
+            },
+            images: {
+              create: [{ url: p.image }],
+            },
           },
-          images: {
-            create: [{ url: p.image }],
-          },
-        },
-      });
-    }
+        })
+      )
+    );
     console.log(`Seeded ${PROJECTS.length} projects.`);
   } else {
     console.log(`Projects already exist (${count}) — skipping project seed.`);
   }
 
-  for (const [i, s] of SERVICES.entries()) {
-    await prisma.service.upsert({
-      where: { order: i },
-      update: { title: s.title, description: s.description },
-      create: { title: s.title, description: s.description, order: i },
-    });
-  }
+  await Promise.all(
+    SERVICES.map((s, i) =>
+      prisma.service.upsert({
+        where: { order: i },
+        update: { title: s.title, description: s.description },
+        create: { title: s.title, description: s.description, order: i },
+      })
+    )
+  );
   console.log(`Seeded ${SERVICES.length} services.`);
 }
 
