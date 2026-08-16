@@ -7,10 +7,10 @@ import { IconClose } from "@/components/icons";
 import { CONTACT_COPY } from "@/lib/constants";
 
 const LINKS = [
-  { label: "Projects", href: "#projects" },
-  { label: "Services", href: "#services" },
+  { label: "Projects", href: "/#projects" },
+  { label: "Services", href: "/#services" },
   { label: "About us", href: "/about" },
-  { label: "Contact", href: "#contact-form" },
+  { label: "Contact", href: "/#contact-form" },
 ];
 
 export default function MobileMenu({

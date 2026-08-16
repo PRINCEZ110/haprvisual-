@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { PROJECT_VIDEOS } from "@/lib/videos";
 import { slugify, type ProjectItem } from "@/lib/data";
 
@@ -211,9 +212,9 @@ export default function Projects({
             Every project starts with a conversation. Tell us about the space,
             the product or the idea — we&apos;ll bring it to life.
           </p>
-          <a href="#contact-form" className="pill mt-10">
+          <Link href="/#contact-form" className="pill mt-10">
             Start a project
-          </a>
+          </Link>
         </div>
       </div>
     </section>

@@ -3,6 +3,7 @@ import { getSession } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { projectSchema } from "@/lib/validation";
 import { upsertCategories } from "@/lib/data";
+import { deleteUploads } from "@/lib/storage";
 
 type Params = { params: Promise<{ id: string }> };
 
@@ -51,7 +52,10 @@ export async function PUT(req: Request, { params }: Params) {
     parsed.data;
 
   const { id } = await params;
-  const existing = await prisma.project.findUnique({ where: { id } });
+  const existing = await prisma.project.findUnique({
+    where: { id },
+    include: { images: { select: { url: true } } },
+  });
   if (!existing) {
     return NextResponse.json({ error: "Not found" }, { status: 404 });
   }
@@ -77,6 +81,10 @@ export async function PUT(req: Request, { params }: Params) {
     include: { categories: true, images: true },
   });
 
+  const oldUrls = [existing.coverImage, ...existing.images.map((i) => i.url)];
+  const newUrls = [coverImage, ...gallery];
+  await deleteUploads(oldUrls.filter((url) => !newUrls.includes(url)));
+
   return NextResponse.json(project);
 }
 
@@ -87,11 +95,15 @@ export async function DELETE(_req: Request, { params }: Params) {
   }
 
   const { id } = await params;
-  const existing = await prisma.project.findUnique({ where: { id } });
+  const existing = await prisma.project.findUnique({
+    where: { id },
+    include: { images: { select: { url: true } } },
+  });
   if (!existing) {
     return NextResponse.json({ error: "Not found" }, { status: 404 });
   }
 
   await prisma.project.delete({ where: { id } });
+  await deleteUploads([existing.coverImage, ...existing.images.map((i) => i.url)]);
   return NextResponse.json({ ok: true });
 }

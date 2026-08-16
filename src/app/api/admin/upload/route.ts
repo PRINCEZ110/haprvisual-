@@ -18,7 +18,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "No file provided." }, { status: 400 });
   }
 
-  const check = isValidImageFile(file);
+  const check = await isValidImageFile(file);
   if (!check.ok) {
     return NextResponse.json({ error: check.error }, { status: 400 });
   }

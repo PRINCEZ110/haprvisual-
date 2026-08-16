@@ -1,9 +1,12 @@
 import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { randomUUID } from "crypto";
 import { mkdirSync, writeFileSync } from "fs";
+import { unlink } from "fs/promises";
 import { join } from "path";
+import sharp from "sharp";
 
 const ALLOWED_EXTENSIONS = ["png", "jpg", "jpeg", "webp", "avif", "gif"];
+const ALLOWED_FORMATS = ["png", "jpeg", "webp", "avif", "gif"];
 const MAX_SIZE_BYTES = 10 * 1024 * 1024; // 10 MB
 
 export function isR2Configured(): boolean {
@@ -16,7 +19,7 @@ export function isR2Configured(): boolean {
   );
 }
 
-export function isValidImageFile(file: File): { ok: boolean; error?: string } {
+export async function isValidImageFile(file: File): Promise<{ ok: boolean; error?: string }> {
   const ext = file.name.split(".").pop()?.toLowerCase() ?? "";
   if (!ALLOWED_EXTENSIONS.includes(ext)) {
     return { ok: false, error: "Unsupported file type." };
@@ -24,7 +27,34 @@ export function isValidImageFile(file: File): { ok: boolean; error?: string } {
   if (file.size > MAX_SIZE_BYTES) {
     return { ok: false, error: "File must be smaller than 10 MB." };
   }
+
+  const buffer = Buffer.from(await file.arrayBuffer());
+  let format: string | undefined;
+  try {
+    format = (await sharp(buffer).metadata()).format;
+  } catch {
+    format = undefined;
+  }
+  if (!format || !ALLOWED_FORMATS.includes(format)) {
+    return { ok: false, error: "File is not a valid image." };
+  }
+
   return { ok: true };
+}
+
+export async function deleteUploads(urls: string[]): Promise<void> {
+  if (isR2Configured()) return; // R2 objects are keyed by UUID; not tracked here.
+  const dir = join(process.cwd(), "public", "uploads");
+  for (const url of new Set(urls)) {
+    if (!url.startsWith("/uploads/")) continue;
+    const name = url.split("/").pop();
+    if (!name) continue;
+    try {
+      await unlink(join(dir, name));
+    } catch {
+      // File already gone — ignore.
+    }
+  }
 }
 
 export async function saveUpload(file: File): Promise<string> {
@@ -56,5 +86,9 @@ export async function saveUpload(file: File): Promise<string> {
   mkdirSync(dir, { recursive: true });
   const filename = key.split("/").pop()!;
   writeFileSync(join(dir, filename), buffer);
+  console.warn(
+    "[storage] R2 not configured — wrote file to /public/uploads. " +
+      "This is ephemeral on serverless platforms (e.g. Vercel); configure R2_* for persistent uploads."
+  );
   return `/uploads/${filename}`;
 }

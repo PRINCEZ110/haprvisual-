@@ -2,15 +2,16 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
+import Link from "next/link";
 import Logo from "@/components/Logo";
 import MobileMenu from "@/components/MobileMenu";
 import { IconMenu } from "@/components/icons";
 
 const NAV_LINKS = [
-  { label: "Projects", href: "#projects" },
-  { label: "Services", href: "#services" },
+  { label: "Projects", href: "/#projects" },
+  { label: "Services", href: "/#services" },
   { label: "About us", href: "/about" },
-  { label: "Contact", href: "#contact-form" },
+  { label: "Contact", href: "/#contact-form" },
 ];
 
 export default function Navbar() {
@@ -43,13 +44,13 @@ export default function Navbar() {
           </nav>
 
           <div className="flex items-center gap-4">
-            <a
-              href="#contact-form"
+            <Link
+              href="/#contact-form"
               className="hidden bg-espresso px-3.5 py-2 text-xs font-medium text-white transition-colors hover:bg-coffee md:inline-block"
               style={{ borderRadius: 2 }}
             >
               Discuss a project
-            </a>
+            </Link>
 
             <button
               type="button"

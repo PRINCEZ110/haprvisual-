@@ -32,10 +32,10 @@ export default function Services({ services }: { services: ServiceItem[] }) {
     Math.min(Math.max(v, min), max);
 
   useEffect(() => {
+    if (preview === null) return;
     let raf = 0;
     const tick = () => {
       raf = requestAnimationFrame(tick);
-      if (preview === null) return;
       const cx = targetRef.current.x;
       const cy = targetRef.current.y;
       const panelRect = panelContentRef.current?.getBoundingClientRect();

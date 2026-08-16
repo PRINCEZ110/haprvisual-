@@ -6,12 +6,6 @@ import { sendContactEmail } from "@/lib/mail";
 
 export async function POST(req: Request) {
   const ip = getClientIp(req);
-  if (!checkRateLimit(ip, 3, 60 * 60 * 1000)) {
-    return NextResponse.json(
-      { error: "Too many submissions. Please try again later." },
-      { status: 429 }
-    );
-  }
 
   let body: unknown;
   try {
@@ -28,6 +22,17 @@ export async function POST(req: Request) {
     return NextResponse.json(
       { error: "Please fill in all required fields correctly." },
       { status: 400 }
+    );
+  }
+
+  // Rate limit only valid submissions so malformed/spam requests don't
+  // exhaust the quota. NOTE: on serverless platforms this in-memory limiter
+  // is per-instance, so it's a soft limit — pair it with a hosted WAF/Redis
+  // limiter for hard guarantees.
+  if (!checkRateLimit(ip, 3, 60 * 60 * 1000)) {
+    return NextResponse.json(
+      { error: "Too many submissions. Please try again later." },
+      { status: 429 }
     );
   }
 

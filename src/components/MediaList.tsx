@@ -59,7 +59,7 @@ export default function MediaList({
                     </span>
                     <span
                       className={`mt-2 block max-w-md text-[13px] leading-[1.7] transition-opacity duration-300 ${
-                        isActive ? "opacity-100" : "opacity-0 lg:opacity-100"
+                        isActive ? "opacity-100" : "lg:opacity-0"
                       }`}
                     >
                       {item.description}

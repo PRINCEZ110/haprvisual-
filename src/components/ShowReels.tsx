@@ -21,7 +21,6 @@ const EASE = [0.22, 0.61, 0.36, 1] as const;
 const CLIP_LEFT = `polygon(0 0, calc(33.333% - ${SLASH}%) 0, calc(33.333% + ${SLASH}%) 100%, 0 100%)`;
 const CLIP_MID = `polygon(calc(33.333% - ${SLASH}%) 0, calc(66.667% - ${SLASH}%) 0, calc(66.667% + ${SLASH}%) 100%, calc(33.333% + ${SLASH}%) 100%)`;
 const CLIP_RIGHT = `polygon(calc(66.667% - ${SLASH}%) 0, 100% 0, 100% 100%, calc(66.667% + ${SLASH}%) 100%)`;
-const CLIP_FULL = "polygon(0 0, 100% 0, 100% 100%, 0 100%)";
 
 const GRID: { reel: number; clip: string }[] = [
   { reel: 5, clip: CLIP_LEFT },
@@ -207,10 +206,12 @@ export default function ShowReels() {
         ))}
       </div>
 
-      <SeamLine vertical at="33.333%" />
-      <SeamLine vertical at="66.667%" />
-      <SeamLine vertical={false} at="33.333%" />
-      <SeamLine vertical={false} at="66.667%" />
+      <div className="hidden lg:block">
+        <SeamLine vertical at="33.333%" />
+        <SeamLine vertical at="66.667%" />
+        <SeamLine vertical={false} at="33.333%" />
+        <SeamLine vertical={false} at="66.667%" />
+      </div>
 
       <SectionTitle left="Show Reels" right="01 — 09" />
       <SectionTitle left="Show Reels" right="01 — 09" mobile />

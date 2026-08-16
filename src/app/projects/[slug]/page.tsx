@@ -30,7 +30,7 @@ export default async function ProjectPage({ params }: Params) {
   if (!project) notFound();
 
   const index = all.findIndex((p) => p.id === project.id);
-  const next = all[(index + 1) % Math.max(all.length, 1)];
+  const next = all.length > 1 ? all[(index + 1) % all.length] : undefined;
   const category = project.categories[0]?.name ?? "Visualization";
 
   return (

@@ -2,8 +2,8 @@
 
 A full-stack, pixel-faithful HAPR Visual agency website
 
-**Stack:** Next.js 14 (App Router) · TypeScript · Tailwind CSS · GSAP · Framer
-Motion · Three.js + React Three Fiber + Drei · Prisma + PostgreSQL ·
+**Stack:** Next.js 15 (App Router) · TypeScript · Tailwind CSS · GSAP · Framer
+Motion · Prisma + PostgreSQL ·
 NextAuth.js (admin auth) · Resend (contact emails) · Cloudflare R2 /
 local uploads · Vercel-ready.
 
@@ -80,9 +80,11 @@ Open http://localhost:3000
 
 | URL      | Credentials (from `.env`)                         |
 | -------- | ------------------------------------------------- |
-| `/admin` | `ADMIN_EMAIL` / `ADMIN_PASSWORD` (defaults: `admin@haprvisual.com` / `admin1234`) |
+| `/admin` | `ADMIN_EMAIL` / `ADMIN_PASSWORD`                  |
 
-Change the defaults before going live.
+> **Security:** the default credentials are rejected at login. Set strong
+> `ADMIN_EMAIL` / `ADMIN_PASSWORD` (and a strong `NEXTAUTH_SECRET`) before
+> deploying. The login endpoint is rate-limited (5 attempts / 15 min).
 
 ---
 
@@ -93,10 +95,10 @@ See `.env.example` for the full list:
 | Variable                | Purpose                                          |
 | ----------------------- | ------------------------------------------------ |
 | `DATABASE_URL`          | PostgreSQL connection string                     |
-| `NEXTAUTH_URL`          | Site URL (http://localhost:3000 in dev)          |
+| `NEXTAUTH_URL`          | Site URL (http://localhost:3000 in dev). **Set to the production URL when deploying** — otherwise sign-in callbacks break. |
 | `NEXTAUTH_SECRET`       | Auth session secret (`openssl rand -base64 32`)  |
 | `ADMIN_EMAIL`           | Admin login email                                |
-| `ADMIN_PASSWORD`        | Admin login password                             |
+| `ADMIN_PASSWORD`        | Admin login password (defaults are rejected)     |
 | `RESEND_API_KEY`        | Optional — send contact emails via Resend        |
 | `CONTACT_FROM_EMAIL`    | Sender for contact emails                        |
 | `CONTACT_TO_EMAIL`      | Recipient for contact emails (default haprvisual@gmail.com) |
@@ -106,8 +108,12 @@ See `.env.example` for the full list:
 
 1. Push the repo to GitHub and import it on Vercel.
 2. Add a hosted Postgres (Neon/Supabase) and run `npx prisma migrate deploy` + `npm run db:seed` against it.
-3. Add all env vars in the Vercel dashboard.
+3. Add all env vars in the Vercel dashboard. **Important:** set `NEXTAUTH_URL` to the production URL and `NEXTAUTH_SECRET`/`ADMIN_PASSWORD` to strong values.
 4. Deploy.
+
+> **Uploads on Vercel:** the local `/public/uploads` fallback is ephemeral on
+> serverless platforms — files disappear on redeploy. Configure the `R2_*`
+> vars for persistent admin uploads, or host the DB/static elsewhere.
 
 > Note: `next build` needs `DATABASE_URL` reachable if you don't use the
 > `catch` fallbacks — the public site gracefully degrades when the DB is
@@ -118,9 +124,11 @@ See `.env.example` for the full list:
 The original site's render assets are copyrighted, so this build uses:
 - **Unsplash CDN photos** for the projects grid and service thumbnails
   (free to use — replace from the admin panel with your own renders).
-- **Local SVG placeholder renders** (`/public/images/*.svg`) for the contact
-  section and about page.
-- A real-time **3D scene (Three.js/R3F)** in the hero — no image required.
+- **Self-hosted MP4 previews** (`/public/videos/*.mp4`) for the contact
+  section, about page and show reels.
+- A full-bleed **hero video** (`/public/videos/hero.mp4`).
+
+> Uploads and videos are self-hosted MP4s; no runtime 3D scene is bundled.
 
 ## Project structure
 

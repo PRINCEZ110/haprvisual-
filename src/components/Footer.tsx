@@ -1,14 +1,14 @@
 import Link from "next/link";
 import Logo from "@/components/Logo";
 import Clock from "@/components/Clock";
-import { IconArrowUpRight, IconBehance, IconInstagram, IconLinkedIn } from "@/components/icons";
+import { IconArrowUpRight } from "@/components/icons";
 import { CONTACT_COPY } from "@/lib/constants";
 
 const STUDIO_LINKS = [
-  { label: "Projects", href: "#projects" },
-  { label: "Services", href: "#services" },
+  { label: "Projects", href: "/#projects" },
+  { label: "Services", href: "/#services" },
   { label: "About us", href: "/about" },
-  { label: "Contact", href: "#contact-form" },
+  { label: "Contact", href: "/#contact-form" },
 ];
 
 const SOCIALS = [
