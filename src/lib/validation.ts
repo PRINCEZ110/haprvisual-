@@ -1,11 +1,16 @@
 import { z } from "zod";
-import { BUDGET_OPTIONS, SERVICE_OPTIONS } from "@/lib/constants";
+import {
+  BUDGET_OPTIONS,
+  DEADLINE_OPTIONS,
+  SERVICE_OPTIONS,
+} from "@/lib/constants";
 
 export const contactSchema = z.object({
   name: z.string().trim().min(1, "Name is required").max(120),
   email: z.string().trim().email("Invalid email").max(200),
   service: z.enum(SERVICE_OPTIONS),
   budget: z.enum(BUDGET_OPTIONS),
+  deadline: z.enum(DEADLINE_OPTIONS),
   message: z.string().trim().max(5000).optional().default(""),
 });
 

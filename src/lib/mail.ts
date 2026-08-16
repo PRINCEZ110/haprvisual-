@@ -21,16 +21,18 @@ export async function sendContactEmail(data: ContactInput) {
     subject: `New project inquiry from ${data.name}`,
     html: `
       <div style="font-family:Helvetica,Arial,sans-serif;background:#F5F0E8;padding:32px;">
-        <h2 style="color:#171410;margin:0 0 16px;">Let's collaborate! — new submission</h2>
+        <h2 style="color:#171410;margin:0 0 16px;">Have a space in mind? — new inquiry</h2>
         <table style="border-collapse:collapse;width:100%;max-width:520px;background:#fff;">
           <tr><td style="padding:12px 16px;border-bottom:1px solid #E0D8CA;color:#7A7066;">Name</td>
               <td style="padding:12px 16px;border-bottom:1px solid #E0D8CA;color:#171410;"><strong>${escapeHtml(data.name)}</strong></td></tr>
           <tr><td style="padding:12px 16px;border-bottom:1px solid #E0D8CA;color:#7A7066;">Email</td>
               <td style="padding:12px 16px;border-bottom:1px solid #E0D8CA;color:#171410;"><a href="mailto:${escapeHtml(data.email)}">${escapeHtml(data.email)}</a></td></tr>
-          <tr><td style="padding:12px 16px;border-bottom:1px solid #E0D8CA;color:#7A7066;">Service</td>
+          <tr><td style="padding:12px 16px;border-bottom:1px solid #E0D8CA;color:#7A7066;">What are we creating?</td>
               <td style="padding:12px 16px;border-bottom:1px solid #E0D8CA;color:#171410;">${escapeHtml(data.service)}</td></tr>
-          <tr><td style="padding:12px 16px;border-bottom:1px solid #E0D8CA;color:#7A7066;">Budget in USD</td>
+          <tr><td style="padding:12px 16px;border-bottom:1px solid #E0D8CA;color:#7A7066;">Project budget</td>
               <td style="padding:12px 16px;border-bottom:1px solid #E0D8CA;color:#171410;">${escapeHtml(data.budget)}</td></tr>
+          <tr><td style="padding:12px 16px;border-bottom:1px solid #E0D8CA;color:#7A7066;">When do you need it?</td>
+              <td style="padding:12px 16px;border-bottom:1px solid #E0D8CA;color:#171410;">${escapeHtml(data.deadline)}</td></tr>
           <tr><td style="padding:12px 16px;color:#7A7066;">Project description</td>
               <td style="padding:12px 16px;color:#171410;">${escapeHtml(data.message || "—")}</td></tr>
         </table>

@@ -9,6 +9,7 @@ export type Submission = {
   email: string;
   service: string;
   budget: string;
+  deadline: string;
   message: string | null;
   read: boolean;
   createdAt: string;
@@ -60,6 +61,7 @@ export default function SubmissionsAdmin({ submissions }: { submissions: Submiss
               <span className="text-sm text-muted">{s.email}</span>
               <span className="text-sm text-muted">{s.service}</span>
               <span className="text-sm text-muted">{s.budget}</span>
+              <span className="text-sm text-muted">{s.deadline}</span>
               <span className="ml-auto text-xs text-muted">
                 {new Date(s.createdAt).toLocaleString()}
               </span>
@@ -67,6 +69,9 @@ export default function SubmissionsAdmin({ submissions }: { submissions: Submiss
 
             {openId === s.id && (
               <div className="border-t border-line px-6 py-5">
+                <p className="text-xs uppercase tracking-[0.2em] text-muted">
+                  Deadline: <span className="text-ink">{s.deadline}</span>
+                </p>
                 {s.message ? (
                   <p className="max-w-2xl text-sm leading-relaxed text-ink/90">{s.message}</p>
                 ) : (

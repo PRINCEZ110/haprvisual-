@@ -10,14 +10,34 @@ export const CATEGORIES = [
 export type CategoryName = (typeof CATEGORIES)[number];
 
 export const SERVICE_OPTIONS = [
-  "Product",
+  "Architecture",
   "Interior",
-  "Exterior",
-  "Modeling",
+  "Product",
+  "3D Modeling",
   "Animation",
 ] as const;
 
-export const BUDGET_OPTIONS = ["Less than 2K", "2K - 10K", "10K - 50K"] as const;
+export type ServiceOption = (typeof SERVICE_OPTIONS)[number];
+
+export const BUDGET_OPTIONS = [
+  "$500 – $1,000",
+  "$1,000 – $3,000",
+  "$3,000 – $5,000",
+  "$5,000+",
+  "Not sure yet",
+] as const;
+
+export type BudgetOption = (typeof BUDGET_OPTIONS)[number];
+
+export const DEADLINE_OPTIONS = [
+  "ASAP",
+  "1–2 weeks",
+  "2–4 weeks",
+  "1–2 months",
+  "Flexible",
+] as const;
+
+export type DeadlineOption = (typeof DEADLINE_OPTIONS)[number];
 
 export const DEFAULT_SERVICES = [
   {
@@ -48,7 +68,11 @@ export const DEFAULT_SERVICES = [
 ] as const;
 
 export const CONTACT_COPY = {
-  heading: "Let's work together",
+  eyebrow: "Contact",
+  heading: "Have a space in mind?",
+  subheading: "Let's make it visible.",
+  intro:
+    "Tell us about your project, and we'll get back to you with the next steps.",
   success: "Thank you! Your submission has been received!",
   error: "Oops! Something went wrong while submitting the form.",
   description:
@@ -56,7 +80,26 @@ export const CONTACT_COPY = {
   email: "haprvisual@gmail.com",
   location: "Kathmandu, Nepal",
   rights: "HAPR® 2026. All rights reserved",
+  cta: "Let's make it real",
+  responseTime: "We usually respond within 1–2 business days.",
+  preferEmail: "Prefer email?",
+  nameLabel: "Your name",
+  emailLabel: "Your email",
+  serviceLabel: "What are we creating?",
+  budgetLabel: "Project budget",
+  deadlineLabel: "When do you need it?",
+  messageLabel: "Tell us about the project",
+  messagePlaceholder:
+    "What are you creating? What do you need visualized? Tell us about the space, product, deadline, references, or anything else that might help us understand the project.",
 } as const;
+
+export const SERVICE_PREVIEWS: Record<ServiceOption, string> = {
+  Architecture: "/videos/service-exterior-render.mp4",
+  Interior: "/videos/service-interior-render.mp4",
+  Product: "/videos/service-product-panel-1.mp4",
+  "3D Modeling": "/videos/service-modeling-render.mp4",
+  Animation: "/videos/service-animation-render.mp4",
+};
 
 export const SERVICE_LABELS: Record<string, string> = {
   "3D product rendering": "Product",

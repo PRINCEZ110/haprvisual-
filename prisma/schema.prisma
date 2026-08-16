@@ -45,6 +45,7 @@ model ContactSubmission {
   email     String
   service   String
   budget    String
+  deadline  String   @default("Flexible")
   message   String?
   read      Boolean  @default(false)
   createdAt DateTime @default(now())
